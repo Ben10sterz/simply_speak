@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "510150646440",
+    "project_id": "simply-speak",
+    "storage_bucket": "simply-speak.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:510150646440:android:3bbdf50c6d197871ccc09d",
+        "android_client_info": {
+          "package_name": "com.example.simply_speak"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "510150646440-vem1r9le1bbl2qmggifn9s4jn67vcv03.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.simply_speak",
+            "certificate_hash": "94cba985920053a2dce72f71586c7913e9c67dc7"
+          }
+        },
+        {
+          "client_id": "510150646440-9biuvpsfpjrovgl6m9ha5n0bo536j91r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPqM6PBeLDvRTVjLmJtbJ1w-qdeNbmAJc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "510150646440-9biuvpsfpjrovgl6m9ha5n0bo536j91r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

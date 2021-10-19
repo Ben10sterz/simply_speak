@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import '../api/google_signin_api.dart';
 import 'home_page.dart';
+import 'package:provider/provider.dart';
+import '../api/google_sign_in_2.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -19,7 +21,14 @@ class _SignInScreenState extends State<SignInScreen> {
         body: Column(children: [
           Container(
             child: Center(
-                child: TextButton(onPressed: signIn, child: Text('Login'))),
+                child: TextButton(
+                    onPressed: () {
+                      final provider = Provider.of<GoogleSignInProvider>(
+                          context,
+                          listen: false);
+                      provider.googleLogin();
+                    },
+                    child: Text('Login'))),
           ),
           Container(
             child: Center(
@@ -36,7 +45,7 @@ class _SignInScreenState extends State<SignInScreen> {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Sign in failed')));
     } else {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
+      Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => Homepage(),
       ));
     }

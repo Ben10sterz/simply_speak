@@ -36,6 +36,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   google_sign_in: ^5.1.1
   table_calendar: ^3.0.2
+  firebase_auth: ^1.1.4
+  speech_to_text: ^5.1.1
+  shared_preferences: ^2.0.8
+  provider: ^5.0.0
 
 dev_dependencies:
   flutter_test:

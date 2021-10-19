@@ -2,10 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../api/google_signin_api.dart';
-import 'sign_in_page.dart';
-
+import 'package:simply_speak/screens/entry_process.dart';
+import 'package:simply_speak/screens/information_page.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'sign_in_page.dart';
 
 class Homepage extends StatefulWidget {
   @override
@@ -20,15 +22,7 @@ class _HomepageState extends State<Homepage> {
   //   required this.user,
   // }) : super(key: key);
 
-  List<DateTime> getHighlightedDates() {
-    return List<DateTime>.generate(
-      10,
-      (int index) => DateTime.now().add(Duration(days: 10 * (index + 1))),
-    );
-  }
-
   PageController pageController = PageController(initialPage: 1);
-
   int currentIndex = 1;
 
   @override
@@ -70,6 +64,14 @@ class _HomepageState extends State<Homepage> {
         children: [
           Container(
             color: Colors.amber,
+            child: Column(
+              children: [
+                ElevatedButton(
+                  onPressed: beginEntry,
+                  child: Icon(Icons.mic),
+                )
+              ],
+            ),
           ),
           Container(
               color: Colors.blue,
@@ -108,6 +110,25 @@ class _HomepageState extends State<Homepage> {
         backgroundColor: Colors.cyan,
       ),
     );
+  }
+
+  beginEntry() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //prefs.setBool('information', false);
+
+    bool? informationStatus = prefs.getBool('information');
+
+    informationStatus ??= false;
+
+    if (informationStatus == false) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => InformationScreen(),
+      ));
+    } else {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => EntryProcessScreen(),
+      ));
+    }
   }
 
   void test() {

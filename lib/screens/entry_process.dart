@@ -17,6 +17,10 @@ class _EntryProcessScreenState extends State<EntryProcessScreen> {
   String _lastWords = '';
   String _fullSentence = '';
 
+  int count = 0;
+  int _fullLength = 0;
+  List<int> _lastLength = [];
+
   @override
   void initState() {
     super.initState();
@@ -30,9 +34,22 @@ class _EntryProcessScreenState extends State<EntryProcessScreen> {
 
   void _onSpeechResult(SpeechRecognitionResult result) {
     setState(() {
+      count++;
+      print(
+          "Count: " + count.toString() + " Result: " + result.recognizedWords);
       _lastWords = result.recognizedWords;
-      _fullSentence += _lastWords;
     });
+
+    if (_speechToText.isNotListening) {
+      print("Stopped listening here");
+      //print("Full Recognized:" + result.recognizedWords);
+      _fullSentence += result.recognizedWords;
+      _lastLength.add(_lastWords.length);
+      _fullLength += _lastLength.last;
+      print(_fullSentence.characters
+          .take(_fullLength - _lastLength.last)
+          .toString());
+    }
   }
 
   /// Manually stop the active speech recognition session
@@ -50,6 +67,16 @@ class _EntryProcessScreenState extends State<EntryProcessScreen> {
     setState(() {});
   }
 
+  void _deleteLast() async {
+    _fullSentence = _fullSentence.characters
+        .take(_fullLength - _lastLength.last)
+        .toString();
+
+    _fullLength -= _lastLength.last;
+    _lastLength.removeLast();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,15 +84,33 @@ class _EntryProcessScreenState extends State<EntryProcessScreen> {
         title: Text('Simply Speak'),
       ),
       body: Container(
+          child: Center(
         child: Column(
           children: [
             Container(
-              child: Column(),
+              child: Column(
+                children: [
+                  Text(
+                    "Prompt #1",
+                    style: TextStyle(fontSize: 10),
+                  ),
+                  Text(
+                    "This is where the prompt selection would be!",
+                    style: TextStyle(fontSize: 10),
+                  )
+                ],
+              ),
             ),
             Container(
               child: Column(
                 children: [
-                  Text("Enter"),
+                  Container(
+                    child: Text(
+                      '$_fullSentence',
+                      style: TextStyle(fontSize: 15),
+                    ),
+                    padding: const EdgeInsets.all(8.0),
+                  ),
                   Text((_speechToText.isListening
                           ? '$_lastWords'
                           : _speechEnabled
@@ -79,12 +124,14 @@ class _EntryProcessScreenState extends State<EntryProcessScreen> {
                       child: Icon(_speechToText.isNotListening
                           ? Icons.mic_off
                           : Icons.mic)),
+                  ElevatedButton(
+                      onPressed: _deleteLast, child: Icon(Icons.backspace)),
                 ],
               ),
             )
           ],
         ),
-      ),
+      )),
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simply_speak/screens/entry_process.dart';
+import 'package:simply_speak/screens/first_prompt.dart';
 
 class InformationScreen extends StatefulWidget {
   InformationScreen({Key? key}) : super(key: key);

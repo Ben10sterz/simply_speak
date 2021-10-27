@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:simply_speak/screens/entry_process.dart';
+import 'package:simply_speak/screens/first_prompt.dart';
 import 'package:simply_speak/screens/information_page.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:shared_preferences/shared_preferences.dart';

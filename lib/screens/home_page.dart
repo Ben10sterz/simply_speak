@@ -150,7 +150,7 @@ class _HomepageState extends State<Homepage> {
       ));
     } else {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => EntryProcessScreen(),
+        builder: (context) => FirstPrompt(),
       ));
     }
   }

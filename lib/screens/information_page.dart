@@ -33,8 +33,8 @@ class _InformationScreenState extends State<InformationScreen> {
                 }),
             ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => EntryProcessScreen()));
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => FirstPrompt()));
                 },
                 child: Text("Go to entry process")),
           ]),

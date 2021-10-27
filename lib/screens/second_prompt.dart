@@ -10,17 +10,18 @@ import '../database/entry_test.dart';
 import '../database/entry_class_dao.dart';
 import '../api/google_sign_in_2.dart';
 
-import 'second_prompt.dart';
+import 'first_prompt.dart';
 
-class FirstPrompt extends StatefulWidget {
-  FirstPrompt({Key? key}) : super(key: key);
+class SecondPrompt extends StatefulWidget {
+  final EntryTestDao entryDao;
+  SecondPrompt({Key? key, required this.entryDao}) : super(key: key);
 
   @override
-  _FirstPromptState createState() => _FirstPromptState();
+  _SecondPromptState createState() => _SecondPromptState();
 }
 
-class _FirstPromptState extends State<FirstPrompt> {
-  var promptNumber = 1;
+class _SecondPromptState extends State<SecondPrompt> {
+  var promptNumber = 2;
 
   final SpeechToText _speechToText = SpeechToText();
   bool _speechEnabled = false;
@@ -31,7 +32,7 @@ class _FirstPromptState extends State<FirstPrompt> {
   int _fullLength = 0;
   List<int> _lastLength = [];
 
-  // EntryTestDao entryTestDao =
+  //final entryDao = EntryTestDao();
   final user = FirebaseAuth.instance.currentUser;
 
   @override
@@ -86,15 +87,12 @@ class _FirstPromptState extends State<FirstPrompt> {
   }
 
   void _sendMessage() {
-    final EntryTestDao entryDao = EntryTestDao();
-    entryDao.resetEntryList();
-    entryDao.setPrompt(_fullSentence, 1);
+    widget.entryDao.setPrompt(_fullSentence, promptNumber);
     // final message = EntryTest('testPurposes', DateTime.now());
     // entryDao.saveEntry(message);
-
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => SecondPrompt(
-        entryDao: entryDao,
+        entryDao: widget.entryDao,
       ),
     ));
   }
@@ -118,7 +116,7 @@ class _FirstPromptState extends State<FirstPrompt> {
               child: Column(
                 children: [
                   Text(
-                    "Prompt #1",
+                    "Prompt #2",
                     style: TextStyle(fontSize: 20),
                   ),
                 ],

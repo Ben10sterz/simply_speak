@@ -10,14 +10,18 @@ import '../database/entry_test.dart';
 import '../database/entry_class_dao.dart';
 import '../api/google_sign_in_2.dart';
 
-class EntryProcessScreen extends StatefulWidget {
-  EntryProcessScreen({Key? key}) : super(key: key);
+import 'first_prompt.dart';
+
+class SecondPrompt extends StatefulWidget {
+  final EntryTestDao entryDao;
+  SecondPrompt({Key? key, required this.entryDao}) : super(key: key);
+
   @override
-  _EntryProcessScreenState createState() => _EntryProcessScreenState();
+  _SecondPromptState createState() => _SecondPromptState();
 }
 
-class _EntryProcessScreenState extends State<EntryProcessScreen> {
-  String title = "Test text";
+class _SecondPromptState extends State<SecondPrompt> {
+  var promptNumber = 3;
 
   final SpeechToText _speechToText = SpeechToText();
   bool _speechEnabled = false;
@@ -28,7 +32,7 @@ class _EntryProcessScreenState extends State<EntryProcessScreen> {
   int _fullLength = 0;
   List<int> _lastLength = [];
 
-  final entryDao = EntryTestDao();
+  //final entryDao = EntryTestDao();
   final user = FirebaseAuth.instance.currentUser;
 
   @override
@@ -83,8 +87,9 @@ class _EntryProcessScreenState extends State<EntryProcessScreen> {
   }
 
   void _sendMessage() {
-    final message = EntryTest('testPurposes', DateTime.now());
-    entryDao.saveEntry(message);
+    widget.entryDao.setPrompt(_fullSentence, promptNumber);
+    // final message = EntryTest('testPurposes', DateTime.now());
+    // entryDao.saveEntry(message);
     setState(() {});
   }
 
@@ -107,7 +112,7 @@ class _EntryProcessScreenState extends State<EntryProcessScreen> {
               child: Column(
                 children: [
                   Text(
-                    "Prompt #1",
+                    "Prompt #2",
                     style: TextStyle(fontSize: 20),
                   ),
                 ],
@@ -173,8 +178,8 @@ class _EntryProcessScreenState extends State<EntryProcessScreen> {
                               onPressed: _deleteLast,
                               child: Icon(Icons.backspace)),
                           Container(
-                              height: 55.0,
-                              width: 75.0,
+                              height: 65.0,
+                              width: 85.0,
                               padding: EdgeInsets.only(top: 0),
                               child: ElevatedButton(
                                   onPressed: _speechToText.isNotListening
@@ -186,13 +191,13 @@ class _EntryProcessScreenState extends State<EntryProcessScreen> {
                                   style: ElevatedButton.styleFrom(
                                       shape: CircleBorder()))),
                           ElevatedButton(
-                            onPressed: _sendMessage,
-                            child: Icon(Icons.save),
-                            // ElevatedButton(
-                            //   onPressed: () => entryDao.checkForVal(),
-                            //   child: Text('Check'),
-                            // )
-                          )
+                              onPressed: _sendMessage,
+                              child: Icon(Icons.arrow_right_alt)
+                              // ElevatedButton(
+                              //   onPressed: () => entryDao.checkForVal(),
+                              //   child: Text('Check'),
+                              // )
+                              )
                         ],
                       ))
                 ],

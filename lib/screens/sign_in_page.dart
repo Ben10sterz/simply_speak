@@ -51,9 +51,13 @@ class _SignInScreenState extends State<SignInScreen> {
           Container(
             padding: EdgeInsets.only(top: 100),
             child: SignInButton(Buttons.Google, onPressed: () {
+              //waitingForSignin();
               final provider =
                   Provider.of<GoogleSignInProvider>(context, listen: false);
               provider.googleLogin();
+              // Navigator.of(context).pushReplacement(MaterialPageRoute(
+              //   builder: (context) => Homepage(),
+              // ));
             }),
           )
         ]));
@@ -77,6 +81,28 @@ class _SignInScreenState extends State<SignInScreen> {
       builder: (context) => Homepage(),
     ));
   }
+
+  // waitingForSignin(bool needProvider) {
+  //   final provider;
+  //   if (needProvider) {
+  //     final provider =
+  //         Provider.of<GoogleSignInProvider>(context, listen: false);
+  //     provider.googleLogin();
+  //   }
+
+  //   if (provider.isSigningIn) {
+  //     waitingForSignin(false);
+  //     return;
+  //   } else if (provider.isLoggedIn) {
+  //     Navigator.of(context).pushReplacement(MaterialPageRoute(
+  //       builder: (context) => Homepage(),
+  //     ));
+  //     providerProvided = false;
+  //   } else {
+  //     print("User did not sign in.");
+  //     providerProvided = false;
+  //   }
+  // }
 }
 
 // Future signIn() async {

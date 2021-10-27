@@ -1,7 +1,14 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import '../database/entry_test.dart';
+import '../database/entry_class_dao.dart';
+import '../api/google_sign_in_2.dart';
 
 class EntryProcessScreen extends StatefulWidget {
   EntryProcessScreen({Key? key}) : super(key: key);
@@ -12,7 +19,7 @@ class EntryProcessScreen extends StatefulWidget {
 class _EntryProcessScreenState extends State<EntryProcessScreen> {
   String title = "Test text";
 
-  SpeechToText _speechToText = SpeechToText();
+  final SpeechToText _speechToText = SpeechToText();
   bool _speechEnabled = false;
   String _lastWords = '';
   String _fullSentence = '';
@@ -21,34 +28,32 @@ class _EntryProcessScreenState extends State<EntryProcessScreen> {
   int _fullLength = 0;
   List<int> _lastLength = [];
 
+  final entryDao = EntryTestDao();
+  final user = FirebaseAuth.instance.currentUser;
+
   @override
   void initState() {
     super.initState();
     _initSpeech();
+    //entryDao.setReference(user!.email!);
   }
 
   void _startListening() async {
     await _speechToText.listen(onResult: _onSpeechResult);
+    _lastWords = '';
     setState(() {});
   }
 
   void _onSpeechResult(SpeechRecognitionResult result) {
     setState(() {
       count++;
-      print(
-          "Count: " + count.toString() + " Result: " + result.recognizedWords);
       _lastWords = result.recognizedWords;
     });
 
     if (_speechToText.isNotListening) {
-      print("Stopped listening here");
-      //print("Full Recognized:" + result.recognizedWords);
-      _fullSentence += result.recognizedWords;
-      _lastLength.add(_lastWords.length);
+      _fullSentence += result.recognizedWords + ' ';
+      _lastLength.add(_lastWords.length + 1);
       _fullLength += _lastLength.last;
-      print(_fullSentence.characters
-          .take(_fullLength - _lastLength.last)
-          .toString());
     }
   }
 
@@ -77,6 +82,12 @@ class _EntryProcessScreenState extends State<EntryProcessScreen> {
     setState(() {});
   }
 
+  void _sendMessage() {
+    final message = EntryTest('testPurposes', DateTime.now());
+    entryDao.saveEntry(message);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,44 +99,102 @@ class _EntryProcessScreenState extends State<EntryProcessScreen> {
         child: Column(
           children: [
             Container(
+              height: 200.0,
+              width: 250.0,
+              padding: EdgeInsets.only(top: 120),
+              // decoration:
+              //     BoxDecoration(border: Border.all(color: Colors.black)),
               child: Column(
                 children: [
                   Text(
                     "Prompt #1",
-                    style: TextStyle(fontSize: 10),
+                    style: TextStyle(fontSize: 20),
                   ),
-                  Text(
-                    "This is where the prompt selection would be!",
-                    style: TextStyle(fontSize: 10),
-                  )
                 ],
               ),
             ),
             Container(
+              height: 100.0,
+              width: 300.0,
+              padding: EdgeInsets.only(top: 0),
+              // decoration:
+              //     BoxDecoration(border: Border.all(color: Colors.black)),
+              child: Column(children: [
+                Text("This is where the prompt will be?",
+                    style: TextStyle(fontSize: 22), textAlign: TextAlign.center)
+              ]),
+            ),
+            Container(
+              height: 330.0,
+              width: 350.0,
+              padding: EdgeInsets.only(top: 50),
+              // decoration:
+              //     BoxDecoration(border: Border.all(color: Colors.black)),
               child: Column(
                 children: [
                   Container(
-                    child: Text(
-                      '$_fullSentence',
-                      style: TextStyle(fontSize: 15),
+                    height: 150.0,
+                    width: 330.0,
+                    padding: EdgeInsets.only(top: 0),
+                    decoration:
+                        BoxDecoration(border: Border.all(color: Colors.black)),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      physics: ScrollPhysics(),
+                      child: Text(
+                        (_speechToText.isListening
+                                ? '$_fullSentence' '$_lastWords'
+                                : _speechEnabled
+                                    ? '$_fullSentence'
+                                    : 'Speech not available')
+                            .toString(),
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      //padding: const EdgeInsets.all(8.0),
                     ),
-                    padding: const EdgeInsets.all(8.0),
                   ),
-                  Text((_speechToText.isListening
-                          ? '$_lastWords'
-                          : _speechEnabled
-                              ? 'Tap the microphone to start listening...'
-                              : 'Speech not available')
-                      .toString()),
-                  ElevatedButton(
-                      onPressed: _speechToText.isNotListening
-                          ? _startListening
-                          : _stopListening,
-                      child: Icon(_speechToText.isNotListening
-                          ? Icons.mic_off
-                          : Icons.mic)),
-                  ElevatedButton(
-                      onPressed: _deleteLast, child: Icon(Icons.backspace)),
+                  // Text((_speechToText.isListening
+                  //         ? '$_fullSentence' '$_lastWords'
+                  //         : _speechEnabled
+                  //             ? 'Tap the microphone to start listening...'
+                  //             : 'Speech not available')
+                  //     .toString()),
+                  Container(
+                      height: 100.0,
+                      width: 330.0,
+                      padding: EdgeInsets.only(top: 0),
+                      // decoration: BoxDecoration(
+                      //     border: Border.all(color: Colors.black)),
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                              onPressed: _deleteLast,
+                              child: Icon(Icons.backspace)),
+                          Container(
+                              height: 55.0,
+                              width: 75.0,
+                              padding: EdgeInsets.only(top: 0),
+                              child: ElevatedButton(
+                                  onPressed: _speechToText.isNotListening
+                                      ? _startListening
+                                      : _stopListening,
+                                  child: Icon(_speechToText.isNotListening
+                                      ? Icons.mic
+                                      : Icons.mic_off),
+                                  style: ElevatedButton.styleFrom(
+                                      shape: CircleBorder()))),
+                          ElevatedButton(
+                            onPressed: _sendMessage,
+                            child: Icon(Icons.save),
+                            // ElevatedButton(
+                            //   onPressed: () => entryDao.checkForVal(),
+                            //   child: Text('Check'),
+                            // )
+                          )
+                        ],
+                      ))
                 ],
               ),
             )

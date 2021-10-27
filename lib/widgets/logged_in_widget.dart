@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:simply_speak/screens/entry_process.dart';
@@ -9,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
-import 'sign_in_page.dart';
+//import 'sign_in_page.dart';
 import '../api/google_sign_in_2.dart';
 
 class Homepage extends StatefulWidget {

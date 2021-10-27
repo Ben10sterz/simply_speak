@@ -6,15 +6,23 @@ class GoogleSignInProvider extends ChangeNotifier {
   final googleSignIn = GoogleSignIn();
 
   bool? _isSigningIn;
+  bool? _isLoggedIn;
 
   GoogleSignInProvider() {
     _isSigningIn = false;
+    _isLoggedIn = false;
   }
 
   bool get isSigningIn => _isSigningIn!;
+  bool get isLoggedIn => _isLoggedIn!;
 
   set isSigningIn(bool isSigningIn) {
     _isSigningIn = isSigningIn;
+    notifyListeners();
+  }
+
+  set isLoggedIn(bool isLoggedIn) {
+    _isLoggedIn = isLoggedIn;
     notifyListeners();
   }
 
@@ -43,11 +51,13 @@ class GoogleSignInProvider extends ChangeNotifier {
       await FirebaseAuth.instance.signInWithCredential(credential);
 
       isSigningIn = false;
+      isLoggedIn = true;
     }
   }
 
   void logout() async {
     await googleSignIn.disconnect();
     FirebaseAuth.instance.signOut();
+    isLoggedIn = false;
   }
 }

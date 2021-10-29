@@ -57,6 +57,7 @@ class _HomepageState extends State<Homepage> {
           ]),
       appBar: AppBar(
         title: Text('Simply Speak'),
+        automaticallyImplyLeading: false,
         centerTitle: true,
         actions: <Widget>[
           CircleAvatar(backgroundImage: NetworkImage(user!.photoURL!)),

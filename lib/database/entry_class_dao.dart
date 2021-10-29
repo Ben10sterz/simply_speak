@@ -1,4 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:simply_speak/database/entry_class.dart';
 import 'entry_test.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -10,11 +11,12 @@ class EntryTestDao {
   DatabaseReference _entryRef = FirebaseDatabase.instance.reference();
 
   EntryTestDao() {
-    print("test to see if it hit here");
     _entryRef = _entryRef.child(user!.uid);
   }
 
-  void saveEntry(EntryTest entry) {
+  void saveEntry() {
+    Entry entry = Entry(DateTime.now(), entryList[1], entryList[2],
+        entryList[3], entryList[4], entryList[5]);
     _entryRef.push().set(entry.toJson());
   }
 
@@ -32,11 +34,28 @@ class EntryTestDao {
   void setDate(DateTime date) {}
 
   void setPrompt(String prompt, var promptNum) {
+    var promptLocation = promptNum + 2;
     //print(object);
-    print(entryList.length);
-    // plus 1 because that's where it appears in the list
-    var promptLocation = promptNum + 1;
+    //print(entryList.length);
     entryList[promptLocation] = prompt;
-    print(entryList[promptLocation]);
+    //print(entryList[promptLocation]);
   }
+
+  void setTitle(String title) {
+    entryList[2] = title;
+  }
+
+  void setRating(String rating) {
+    entryList[1] = rating;
+  }
+
+  void printList() {
+    for (var i = 0; i < entryList.length; i++) {
+      print(entryList[i]);
+    }
+  }
+
+  String getPrompt(var promptNum) => entryList[promptNum + 2];
+  String getTitle() => entryList[2];
+  String getRating() => entryList[1];
 }

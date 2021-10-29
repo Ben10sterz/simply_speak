@@ -1,29 +1,21 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
 import 'package:flutter/material.dart';
+import 'package:simply_speak/screens/entry_rating.dart';
 
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
-
-import '../database/entry_test.dart';
 import '../database/entry_class_dao.dart';
-import '../api/google_sign_in_2.dart';
 
-//import 'first_prompt.dart';
-import 'third_prompt.dart';
-
-class SecondPrompt extends StatefulWidget {
+class EntryTitle extends StatefulWidget {
   final EntryTestDao entryDao;
-  SecondPrompt({Key? key, required this.entryDao}) : super(key: key);
+  EntryTitle({Key? key, required this.entryDao}) : super(key: key);
 
   @override
-  _SecondPromptState createState() => _SecondPromptState();
+  _EntryTitleState createState() => _EntryTitleState();
 }
 
-class _SecondPromptState extends State<SecondPrompt> {
-  var promptNumber = 2;
-
+class _EntryTitleState extends State<EntryTitle> {
   final SpeechToText _speechToText = SpeechToText();
   bool _speechEnabled = false;
   String _lastWords = '';
@@ -57,6 +49,7 @@ class _SecondPromptState extends State<SecondPrompt> {
 
     if (_speechToText.isNotListening) {
       _fullSentence += result.recognizedWords + ' ';
+      _fullSentence = _fullSentence.toTitleCase();
       _lastLength.add(_lastWords.length + 1);
       _fullLength += _lastLength.last;
     }
@@ -88,11 +81,10 @@ class _SecondPromptState extends State<SecondPrompt> {
   }
 
   void _sendMessage() {
-    widget.entryDao.setPrompt(_fullSentence, promptNumber);
-    // final message = EntryTest('testPurposes', DateTime.now());
-    // entryDao.saveEntry(message);
+    widget.entryDao.setTitle(_fullSentence);
+
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => ThirdPrompt(
+      builder: (context) => EntryRating(
         entryDao: widget.entryDao,
       ),
     ));
@@ -117,7 +109,7 @@ class _SecondPromptState extends State<SecondPrompt> {
               child: Column(
                 children: [
                   Text(
-                    "Prompt #2",
+                    " ",
                     style: TextStyle(fontSize: 20),
                   ),
                 ],
@@ -130,7 +122,7 @@ class _SecondPromptState extends State<SecondPrompt> {
               // decoration:
               //     BoxDecoration(border: Border.all(color: Colors.black)),
               child: Column(children: [
-                Text("This is where the prompt will be?",
+                Text("Enter a Title For Your Entry",
                     style: TextStyle(fontSize: 22), textAlign: TextAlign.center)
               ]),
             ),
@@ -143,7 +135,7 @@ class _SecondPromptState extends State<SecondPrompt> {
               child: Column(
                 children: [
                   Container(
-                    height: 150.0,
+                    height: 100.0,
                     width: 330.0,
                     padding: EdgeInsets.only(top: 0),
                     decoration:
@@ -158,7 +150,8 @@ class _SecondPromptState extends State<SecondPrompt> {
                                     ? '$_fullSentence'
                                     : 'Speech not available')
                             .toString(),
-                        style: TextStyle(fontSize: 15),
+                        style: TextStyle(fontSize: 30),
+                        textAlign: TextAlign.center,
                       ),
                       //padding: const EdgeInsets.all(8.0),
                     ),
@@ -214,4 +207,14 @@ class _SecondPromptState extends State<SecondPrompt> {
       )),
     );
   }
+}
+
+extension StringCasingExtension on String {
+  String toCapitalized() =>
+      this.length > 0 ? '${this[0].toUpperCase()}${this.substring(1)}' : '';
+  String toTitleCase() => this
+      .replaceAll(RegExp(' +'), ' ')
+      .split(" ")
+      .map((str) => str.toCapitalized())
+      .join(" ");
 }

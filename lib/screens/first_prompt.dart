@@ -170,6 +170,7 @@ class _FirstPromptState extends State<FirstPrompt> {
                   //             ? 'Tap the microphone to start listening...'
                   //             : 'Speech not available')
                   //     .toString()),
+                  Spacer(),
                   Container(
                       height: 100.0,
                       width: 330.0,

@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:simply_speak/screens/entry_title.dart';
 
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
@@ -12,15 +13,15 @@ import '../api/google_sign_in_2.dart';
 
 import 'first_prompt.dart';
 
-class SecondPrompt extends StatefulWidget {
+class ThirdPrompt extends StatefulWidget {
   final EntryTestDao entryDao;
-  SecondPrompt({Key? key, required this.entryDao}) : super(key: key);
+  ThirdPrompt({Key? key, required this.entryDao}) : super(key: key);
 
   @override
-  _SecondPromptState createState() => _SecondPromptState();
+  _ThirdPromptState createState() => _ThirdPromptState();
 }
 
-class _SecondPromptState extends State<SecondPrompt> {
+class _ThirdPromptState extends State<ThirdPrompt> {
   var promptNumber = 3;
 
   final SpeechToText _speechToText = SpeechToText();
@@ -90,7 +91,12 @@ class _SecondPromptState extends State<SecondPrompt> {
     widget.entryDao.setPrompt(_fullSentence, promptNumber);
     // final message = EntryTest('testPurposes', DateTime.now());
     // entryDao.saveEntry(message);
-    setState(() {});
+    //widget.entryDao.printList();
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => EntryTitle(
+        entryDao: widget.entryDao,
+      ),
+    ));
   }
 
   @override
@@ -164,6 +170,7 @@ class _SecondPromptState extends State<SecondPrompt> {
                   //             ? 'Tap the microphone to start listening...'
                   //             : 'Speech not available')
                   //     .toString()),
+                  Spacer(),
                   Container(
                       height: 100.0,
                       width: 330.0,

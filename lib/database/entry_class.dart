@@ -6,21 +6,21 @@ class Entry {
   final DateTime date;
   final String rating;
 
-  Entry(this.date, this.title, this.rating, this.entryOne, this.entryTwo,
+  Entry(this.date, this.rating, this.title, this.entryOne, this.entryTwo,
       this.entryThree);
 
   Entry.fromJson(Map<dynamic, dynamic> json)
       : date = DateTime.parse(json['date'] as String),
-        title = json['title'] as String,
         rating = json['rating'] as String,
+        title = json['title'] as String,
         entryOne = json['entryOne'] as String,
         entryTwo = json['entryTwo'] as String,
         entryThree = json['entryThree'] as String;
 
   Map<dynamic, dynamic> toJson() => <dynamic, dynamic>{
         'date': date.toString(),
-        'title': title,
         'rating': rating,
+        'title': title,
         'entryOne': entryOne,
         'entryTwo': entryTwo,
         'entryThree': entryThree,

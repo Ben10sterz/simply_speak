@@ -55,8 +55,8 @@ class _EntryReviewState extends State<EntryReview> {
                   height: 100.0,
                   width: 250.0,
                   padding: EdgeInsets.only(top: 20),
-                  decoration:
-                      BoxDecoration(border: Border.all(color: Colors.black)),
+                  // decoration:
+                  //     BoxDecoration(border: Border.all(color: Colors.black)),
                   child: Column(
                     children: [
                       Text(
@@ -71,8 +71,8 @@ class _EntryReviewState extends State<EntryReview> {
                   height: 100.0,
                   width: 300.0,
                   padding: EdgeInsets.only(top: 0),
-                  decoration:
-                      BoxDecoration(border: Border.all(color: Colors.black)),
+                  // decoration:
+                  //     BoxDecoration(border: Border.all(color: Colors.black)),
                   child: (SingleChildScrollView(
                       scrollDirection: Axis.vertical,
                       physics: ScrollPhysics(),
@@ -86,19 +86,19 @@ class _EntryReviewState extends State<EntryReview> {
                       ))),
                 ),
                 Container(
-                  height: 700.0,
+                  height: 850.0,
                   width: 350.0,
                   //padding: EdgeInsets.only(top: 0),
-                  decoration:
-                      BoxDecoration(border: Border.all(color: Colors.black)),
+                  // decoration:
+                  //     BoxDecoration(border: Border.all(color: Colors.black)),
                   child: Column(
                     children: [
                       Container(
                           height: 40.0,
                           width: 330.0,
                           //padding: EdgeInsets.only(top: 0),
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black)),
+                          // decoration: BoxDecoration(
+                          //     border: Border.all(color: Colors.black)),
                           child: Text(
                             "This is the area for prompt #1",
                             style: TextStyle(fontSize: 20),
@@ -119,11 +119,11 @@ class _EntryReviewState extends State<EntryReview> {
                       ),
                       Spacer(),
                       Container(
-                          height: 40.0,
+                          height: 60.0,
                           width: 330.0,
-                          //padding: EdgeInsets.only(top: 0),
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black)),
+                          padding: EdgeInsets.only(top: 20),
+                          // decoration: BoxDecoration(
+                          //     border: Border.all(color: Colors.black)),
                           child: Text(
                             "This is the area for prompt #2",
                             style: TextStyle(fontSize: 20),
@@ -144,11 +144,11 @@ class _EntryReviewState extends State<EntryReview> {
                       ),
                       Spacer(),
                       Container(
-                          height: 40.0,
+                          height: 60.0,
                           width: 330.0,
-                          //padding: EdgeInsets.only(top: 0),
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black)),
+                          padding: EdgeInsets.only(top: 20),
+                          // decoration: BoxDecoration(
+                          //     border: Border.all(color: Colors.black)),
                           child: Text(
                             "This is the area for prompt #3",
                             style: TextStyle(fontSize: 20),
@@ -169,8 +169,10 @@ class _EntryReviewState extends State<EntryReview> {
                       ),
                       Container(
                           width: 330,
-                          height: 100,
-                          padding: EdgeInsets.only(top: 20),
+                          height: 125,
+                          // decoration: BoxDecoration(
+                          //     border: Border.all(color: Colors.black)),
+                          padding: EdgeInsets.only(top: 30),
                           child: Image(
                             width: 50,
                             height: 50,
@@ -182,17 +184,27 @@ class _EntryReviewState extends State<EntryReview> {
                           height: 100.0,
                           width: 330.0,
                           padding: EdgeInsets.only(top: 0),
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black)),
+                          // decoration: BoxDecoration(
+                          //     border: Border.all(color: Colors.black)),
                           alignment: Alignment.bottomCenter,
                           child: ElevatedButton(
                               onPressed: _sendMessage,
-                              child: Icon(Icons.arrow_right_alt)
+                              child: Icon(Icons.save),
+                              style: ElevatedButton.styleFrom(
+                                  fixedSize: Size(75, 50))
                               // ElevatedButton(
                               //   onPressed: () => entryDao.checkForVal(),
                               //   child: Text('Check'),
                               // )
-                              ))
+                              )),
+                      Container(
+                          height: 100.0,
+                          width: 330.0,
+                          padding: EdgeInsets.only(top: 10),
+                          child: Text(
+                              "WARNING!\n You will be unable to make changes after saving.",
+                              style: TextStyle(fontSize: 13),
+                              textAlign: TextAlign.center)),
                     ],
                   ),
                 )

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simply_speak/database/entry_class_dao.dart';
 import 'package:simply_speak/screens/first_prompt.dart';
 
 class InformationScreen extends StatefulWidget {
-  InformationScreen({Key? key}) : super(key: key);
+  final EntryTestDao entryDao;
+  InformationScreen({Key? key, required this.entryDao}) : super(key: key);
   @override
   _InformationScreenState createState() => _InformationScreenState();
 }
@@ -33,8 +35,10 @@ class _InformationScreenState extends State<InformationScreen> {
                 }),
             ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => FirstPrompt()));
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => FirstPrompt(
+                            entryDao: widget.entryDao,
+                          )));
                 },
                 child: Text("Go to entry process")),
           ]),

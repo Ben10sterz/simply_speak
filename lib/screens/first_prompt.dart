@@ -13,7 +13,8 @@ import '../api/google_sign_in_2.dart';
 import 'second_prompt.dart';
 
 class FirstPrompt extends StatefulWidget {
-  FirstPrompt({Key? key}) : super(key: key);
+  final EntryTestDao entryDao;
+  FirstPrompt({Key? key, required this.entryDao}) : super(key: key);
 
   @override
   _FirstPromptState createState() => _FirstPromptState();
@@ -86,15 +87,15 @@ class _FirstPromptState extends State<FirstPrompt> {
   }
 
   void _sendMessage() {
-    final EntryTestDao entryDao = EntryTestDao();
-    entryDao.resetEntryList();
-    entryDao.setPrompt(_fullSentence, 1);
+    // final EntryTestDao entryDao = EntryTestDao();
+    widget.entryDao.resetEntryList();
+    widget.entryDao.setPrompt(_fullSentence, 1);
     // final message = EntryTest('testPurposes', DateTime.now());
     // entryDao.saveEntry(message);
 
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => SecondPrompt(
-        entryDao: entryDao,
+        entryDao: widget.entryDao,
       ),
     ));
   }

@@ -2,12 +2,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:simply_speak/database/entry_class_dao.dart';
 import 'package:simply_speak/screens/first_prompt.dart';
 import 'package:simply_speak/screens/information_page.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
+
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 
 import 'sign_in_page.dart';
 import '../api/google_sign_in_2.dart';
@@ -18,6 +22,12 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  // DateFormat dateFormat = new DateFormat.;
+
+  // void initState() {
+  //   initializeDateFormatting();
+  //   dateFormat = new DateFormat.yMMMMd('cs');
+  // }
   //final GoogleSignInAccount user;
 
   // Homepage({
@@ -29,6 +39,12 @@ class _HomepageState extends State<Homepage> {
   int currentIndex = 1;
 
   final user = FirebaseAuth.instance.currentUser;
+
+  final EntryTestDao entryDao = EntryTestDao();
+
+  void checkEntryMadeToday() {
+    entryDao.checkForVal();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,18 +108,37 @@ class _HomepageState extends State<Homepage> {
               children: [
                 ElevatedButton(
                   onPressed: beginEntry,
-                  child: Icon(Icons.mic),
+                  child: Icon(entryDao.wasEntryMadeTodayAlready()
+                      ? Icons.mic
+                      : Icons.mic_off),
                 )
               ],
             ),
           ),
           Container(
-              color: Colors.blue,
-              child: TableCalendar(
-                firstDay: DateTime.now(),
-                lastDay: DateTime.now().add(const Duration(days: 5 * 365)),
-                focusedDay: DateTime.now(),
-              )),
+            color: Colors.blue,
+            // child: TableCalendar(
+            //     firstDay: DateTime.now(),
+            //     lastDay: DateTime.now().add(const Duration(days: 5 * 365)),
+            //     focusedDay: DateTime.now(),
+            //     calendarBuilders:
+            //          CalendarBuilders(defaultBuilder: (context, day) {
+
+            //          }
+            //dowBuilder: (context, day) {
+            //   if (day.weekday == DateTime.sunday) {
+            //     final text = DateFormat.E().format(day);
+
+            //     return Center(
+            //       child: Text(
+            //         text,
+            //         style: TextStyle(color: Colors.blue),
+            //       ),
+            //     );
+            //   }
+            // })
+            //)
+          ),
           Container(
             color: Colors.cyan,
             child: Image(image: NetworkImage(user!.photoURL!)),
@@ -129,8 +164,9 @@ class _HomepageState extends State<Homepage> {
         // )),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => pageController.animateToPage(0,
-            duration: Duration(milliseconds: 250), curve: Curves.bounceIn),
+        onPressed: () => checkEntryMadeToday(),
+        // pageController.animateToPage(0,
+        //     duration: Duration(milliseconds: 250), curve: Curves.bounceIn),
         child: const Icon(Icons.mic),
         backgroundColor: Colors.cyan,
       ),
@@ -147,11 +183,13 @@ class _HomepageState extends State<Homepage> {
 
     if (informationStatus == false) {
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => InformationScreen(),
+        builder: (context) => InformationScreen(
+          entryDao: entryDao,
+        ),
       ));
     } else {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => FirstPrompt(),
+        builder: (context) => FirstPrompt(entryDao: entryDao),
       ));
     }
   }

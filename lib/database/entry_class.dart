@@ -3,14 +3,14 @@ class Entry {
   final String entryTwo;
   final String entryThree;
   final String title;
-  final DateTime date;
+  final String date;
   final String rating;
 
   Entry(this.date, this.rating, this.title, this.entryOne, this.entryTwo,
       this.entryThree);
 
   Entry.fromJson(Map<dynamic, dynamic> json)
-      : date = DateTime.parse(json['date'] as String),
+      : date = json['date'] as String,
         rating = json['rating'] as String,
         title = json['title'] as String,
         entryOne = json['entryOne'] as String,

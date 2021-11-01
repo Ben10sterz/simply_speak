@@ -20,6 +20,8 @@ class _EntryRatingState extends State<EntryRating> {
 
   String rating = '';
 
+  List<bool> selectedRating = [false, false, false, false, false];
+
   void _sendMessage() {
     widget.entryDao.setRating(rating);
 
@@ -32,6 +34,8 @@ class _EntryRatingState extends State<EntryRating> {
 
   void setRating(String choice) {
     rating = choice;
+    selectedRating = [false, false, false, false, false];
+    selectedRating[int.parse(choice) - 1] = true;
   }
 
   @override
@@ -84,31 +88,91 @@ class _EntryRatingState extends State<EntryRating> {
                       padding: EdgeInsets.only(top: 0),
                       child: Row(
                         children: [
-                          IconButton(
-                              onPressed: () => setRating('1'),
-                              iconSize: 50,
-                              icon:
-                                  Image.asset('assets/images/Red Smiley.png')),
-                          IconButton(
-                              onPressed: () => setRating('2'),
-                              iconSize: 50,
-                              icon: Image.asset(
-                                  'assets/images/Red Orange Smiley.png')),
-                          IconButton(
-                              onPressed: () => setRating('3'),
-                              iconSize: 50,
-                              icon: Image.asset(
-                                  'assets/images/Orange Smiley.png')),
-                          IconButton(
-                              onPressed: () => setRating('4'),
-                              iconSize: 50,
-                              icon: Image.asset(
-                                  'assets/images/Yellow Green Smiley.png')),
-                          IconButton(
-                              onPressed: () => setRating('5'),
-                              iconSize: 50,
-                              icon:
-                                  Image.asset('assets/images/Green Smiley.png'))
+                          Container(
+                            //color: Colors.green,
+                            decoration: BoxDecoration(
+                                color: selectedRating[0]
+                                    ? Colors.blue
+                                    : Colors.transparent,
+                                shape: BoxShape.circle),
+                            child: IconButton(
+                                onPressed: () {
+                                  setRating('1');
+                                  setState(() {});
+                                },
+                                iconSize: 50,
+                                splashColor: Colors.blue,
+                                icon: Image.asset(
+                                    'assets/images/Red Smiley.png')),
+                          ),
+                          Container(
+                            //color: Colors.green,
+                            decoration: BoxDecoration(
+                                color: selectedRating[1]
+                                    ? Colors.blue
+                                    : Colors.transparent,
+                                shape: BoxShape.circle),
+                            child: IconButton(
+                                onPressed: () {
+                                  setRating('2');
+                                  setState(() {});
+                                },
+                                iconSize: 50,
+                                splashColor: Colors.blue,
+                                icon: Image.asset(
+                                    'assets/images/Red Orange Smiley.png')),
+                          ),
+                          Container(
+                            //color: Colors.green,
+                            decoration: BoxDecoration(
+                                color: selectedRating[2]
+                                    ? Colors.blue
+                                    : Colors.transparent,
+                                shape: BoxShape.circle),
+                            child: IconButton(
+                                onPressed: () {
+                                  setRating('3');
+                                  setState(() {});
+                                },
+                                iconSize: 50,
+                                splashColor: Colors.blue,
+                                icon: Image.asset(
+                                    'assets/images/Orange Smiley.png')),
+                          ),
+                          Container(
+                            //color: Colors.green,
+                            decoration: BoxDecoration(
+                                color: selectedRating[3]
+                                    ? Colors.blue
+                                    : Colors.transparent,
+                                shape: BoxShape.circle),
+                            child: IconButton(
+                                onPressed: () {
+                                  setRating('4');
+                                  setState(() {});
+                                },
+                                iconSize: 50,
+                                splashColor: Colors.blue,
+                                icon: Image.asset(
+                                    'assets/images/Yellow Green Smiley.png')),
+                          ),
+                          Container(
+                            //color: Colors.green,
+                            decoration: BoxDecoration(
+                                color: selectedRating[4]
+                                    ? Colors.blue
+                                    : Colors.transparent,
+                                shape: BoxShape.circle),
+                            child: IconButton(
+                                onPressed: () {
+                                  setRating('5');
+                                  setState(() {});
+                                },
+                                iconSize: 50,
+                                splashColor: Colors.blue,
+                                icon: Image.asset(
+                                    'assets/images/Green Smiley.png')),
+                          )
                         ],
                       )
                       //padding: const EdgeInsets.all(8.0),

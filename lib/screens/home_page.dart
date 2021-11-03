@@ -22,14 +22,6 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  // DateFormat dateFormat = new DateFormat.;
-
-  // void initState() {
-  //   initializeDateFormatting();
-  //   dateFormat = new DateFormat.yMMMMd('cs');
-  // }
-  //final GoogleSignInAccount user;
-
   // Homepage({
   //   Key? key,
   //   required this.user,
@@ -42,8 +34,8 @@ class _HomepageState extends State<Homepage> {
 
   final EntryTestDao entryDao = EntryTestDao();
 
-  void checkEntryMadeToday() {
-    entryDao.checkForVal();
+  bool checkEntryMadeToday() {
+    return entryDao.wasEntryMadeTodayAlready();
   }
 
   @override
@@ -108,37 +100,43 @@ class _HomepageState extends State<Homepage> {
               children: [
                 ElevatedButton(
                   onPressed: beginEntry,
-                  child: Icon(entryDao.wasEntryMadeTodayAlready()
-                      ? Icons.mic
-                      : Icons.mic_off),
+                  child: Icon(
+                      // checkEntryMadeToday() ? Icons.mic :
+                      Icons.mic_off),
                 )
               ],
             ),
           ),
           Container(
-            color: Colors.blue,
-            // child: TableCalendar(
-            //     firstDay: DateTime.now(),
-            //     lastDay: DateTime.now().add(const Duration(days: 5 * 365)),
-            //     focusedDay: DateTime.now(),
-            //     calendarBuilders:
-            //          CalendarBuilders(defaultBuilder: (context, day) {
+              color: Colors.blue,
+              child: TableCalendar(
+                  firstDay: DateTime.now(),
+                  lastDay: DateTime.now().add(const Duration(days: 5 * 365)),
+                  focusedDay: DateTime.now(),
+                  dayHitTestBehavior: HitTestBehavior.translucent,
+                  calendarBuilders:
+                      CalendarBuilders(defaultBuilder: (context, day, test) {
+                    final text = DateFormat.E().format(day);
 
-            //          }
-            //dowBuilder: (context, day) {
-            //   if (day.weekday == DateTime.sunday) {
-            //     final text = DateFormat.E().format(day);
+                    return Center(
+                      child: Text(
+                        text,
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    );
+                    //          }
+                    //     dowBuilder: (context, day) {
+                    //   if (day.weekday == DateTime.sunday) {
+                    //     final text = DateFormat.E().format(day);
 
-            //     return Center(
-            //       child: Text(
-            //         text,
-            //         style: TextStyle(color: Colors.blue),
-            //       ),
-            //     );
-            //   }
-            // })
-            //)
-          ),
+                    //     return Center(
+                    //       child: Text(
+                    //         text,
+                    //         style: TextStyle(color: Colors.blue),
+                    //       ),
+                    //     );
+                    //   }
+                  }))),
           Container(
             color: Colors.cyan,
             child: Image(image: NetworkImage(user!.photoURL!)),

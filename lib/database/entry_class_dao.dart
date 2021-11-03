@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:simply_speak/database/entry_class.dart';
 import 'entry_test.dart';
@@ -15,40 +17,98 @@ class EntryTestDao {
   }
 
   String getYearMonthDay() {
-    DateTime now = DateTime.now();
-    return (now.year.toString() +
-        '/' +
-        now.month.toString() +
-        '/' +
-        now.day.toString());
+    DateTime date = new DateTime(
+        DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    var compactDate = date.toString().split(' ')[0];
+    return compactDate;
   }
 
   bool wasEntryMadeTodayAlready() {
     bool result = true;
+
+    final test = _entryRef.get();
+
+    print(test.toString());
 
     _entryRef.once().then((DataSnapshot snapshot) {
       if (snapshot.value == null) {
         print("Hit here");
         result = true;
         //return;
+      } else {
+        Map<dynamic, dynamic> values = snapshot.value;
+
+        for (var entries in values.values) {
+          final message = Entry.fromJson(entries);
+
+          print(message.date);
+
+          var splitDate = message.date.split('-');
+          // changes string to list of [year, month, day]
+
+          print(DateTime.now().day);
+          // print(splitDate[1])
+
+          if (splitDate[0] == DateTime.now().year.toString()) {
+            print("Year the same");
+            if (splitDate[1] == DateTime.now().month.toString()) {
+              print("Month is the same");
+              if (splitDate[2] == DateTime.now().day.toString()) {
+                print("yes they the same");
+                result = false;
+              } else if (splitDate[2] == '0' + DateTime.now().day.toString()) {
+                print("okay NOW it is true");
+                result = false;
+              }
+            }
+          }
+
+          //if(message.date == DateTime.now())
+        }
       }
 
-      Map<dynamic, dynamic> values = snapshot.value;
+      //Map<dynamic, dynamic> deeper = values.values;
 
-      values.forEach((key, value) {
-        if (value.toString().contains(getYearMonthDay())) {
-          print("Should be false");
-          result = !result;
-          print(result);
-        }
-        //  else {
-        //   result = true;
-        // }
-      });
+      //print(values.runtimeType.toString());
+
+      //print(values.values.toString());
+
+      //final json = snapshot.value as Map<dynamic, dynamic>;
+
+      //final message = Entry.fromJson(json);
+
+      // print(message);
+
+      // List<dynamic> parsedListJson = jsonDecode(values.toString());
+
+      // print(parsedListJson);
+
+      // values.map((key, value) => list.add(value))
+
+      // for (var prompts in values.values) {
+      //   //List<dynamic> list = jsonDecode(prompts);
+      //   //print(list.toString());
+      //   //print("Key: " + prompts);
+      //   print("Value: " + prompts.toString());
+      //   //print('${values[prompts]}');
+      // }
+
+      //List<dynamic> list = jsonDecode(prompts);
+
+      // values.forEach((key, value) async {
+      //   if (value.toString().contains(getYearMonthDay())) {
+      //     print("Should be false");
+      //     result = !result;
+      //     //print(result);
+      //   }
+      //   //  else {
+      //   //   result = true;
+      //   // }
+      // });
     });
-    // ignore: avoid_print
-    print(result);
+
     return result;
+    //return result;
   }
 
   void saveEntry() {
@@ -88,6 +148,7 @@ class EntryTestDao {
         }
       });
     });
+    print("test boy");
   }
 
   void resetEntryList() {

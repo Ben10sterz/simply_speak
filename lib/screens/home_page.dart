@@ -27,6 +27,14 @@ class _HomepageState extends State<Homepage> {
   //   required this.user,
   // }) : super(key: key);
 
+  @override
+  initState() {
+    calendarList = [
+      'assets/images/Red Smiley.png',
+      'assets/images/Red Orange Smiley.png'
+    ];
+  }
+
   PageController pageController = PageController(initialPage: 1);
   int currentIndex = 1;
 
@@ -34,8 +42,22 @@ class _HomepageState extends State<Homepage> {
 
   final EntryTestDao entryDao = EntryTestDao();
 
+  List<String> calendarList = [];
+  List<String> currentDateForCalendar = [
+    DateTime.now().year.toString(),
+    DateTime.now().month.toString()
+  ];
+
   bool checkEntryMadeToday() {
     return entryDao.wasEntryMadeTodayAlready();
+  }
+
+  Future<List> _initGetDatabase(List list) async {
+    print("hit init GetDatabase");
+    return calendarList = [
+      'assets/images/Red Smiley.png',
+      'assets/images/Red Orange Smiley.png'
+    ];
   }
 
   @override
@@ -86,81 +108,109 @@ class _HomepageState extends State<Homepage> {
           //     icon: ImageIcon(NetworkImage(user!.photoURL!)))
         ],
       ),
-      body: PageView(
-        controller: pageController,
-        onPageChanged: (page) {
-          setState(() {
-            currentIndex = page;
-          });
-        },
-        children: [
-          Container(
-            color: Colors.amber,
-            child: Column(
-              children: [
-                ElevatedButton(
-                  onPressed: beginEntry,
-                  child: Icon(
-                      // checkEntryMadeToday() ? Icons.mic :
-                      Icons.mic_off),
-                )
-              ],
-            ),
-          ),
-          Container(
-              color: Colors.blue,
-              child: TableCalendar(
-                  firstDay: DateTime.now(),
-                  lastDay: DateTime.now().add(const Duration(days: 5 * 365)),
-                  focusedDay: DateTime.now(),
-                  dayHitTestBehavior: HitTestBehavior.translucent,
-                  calendarBuilders:
-                      CalendarBuilders(defaultBuilder: (context, day, test) {
-                    final text = DateFormat.E().format(day);
+      body: FutureBuilder(
+          future: _initGetDatabase(currentDateForCalendar),
+          builder: (
+            BuildContext context,
+            AsyncSnapshot<List> snapshot,
+          ) {
+            if (snapshot.hasData) {
+              return PageView(
+                controller: pageController,
+                onPageChanged: (page) {
+                  setState(() {
+                    currentIndex = page;
+                  });
+                },
+                children: [
+                  Container(
+                    color: Colors.amber,
+                    child: Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: beginEntry,
+                          child: Icon(
+                              // checkEntryMadeToday() ? Icons.mic :
+                              Icons.mic_off),
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                      color: Colors.blue,
+                      child: TableCalendar(
+                          firstDay: DateTime.now(),
+                          lastDay:
+                              DateTime.now().add(const Duration(days: 5 * 365)),
+                          focusedDay: DateTime.now(),
+                          dayHitTestBehavior: HitTestBehavior.translucent,
+                          onDaySelected: (date, event) {
+                            print(date.toString());
+                          },
+                          onPageChanged: (date) {
+                            _initGetDatabase(currentDateForCalendar);
+                            calendarList = [
+                              'assets/images/Red Smiley.png',
+                              'assets/images/Red Orange Smiley.png'
+                            ];
+                          },
+                          calendarBuilders: CalendarBuilders(
+                              defaultBuilder: (context, day, test) {
+                            final text = DateFormat.E().format(day);
 
-                    return Center(
-                      child: Text(
-                        text,
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    );
-                    //          }
-                    //     dowBuilder: (context, day) {
-                    //   if (day.weekday == DateTime.sunday) {
-                    //     final text = DateFormat.E().format(day);
+                            return Center(
+                              child: IconButton(
+                                icon: Image.asset(calendarList[1]),
+                                onPressed: () {
+                                  print("hit me");
+                                },
+                              ),
+                              // Text(
+                              //   text,
+                              //   style: TextStyle(color: Colors.red),
+                              // ),
+                            );
+                            //          }
+                            //     dowBuilder: (context, day) {
+                            //   if (day.weekday == DateTime.sunday) {
+                            //     final text = DateFormat.E().format(day);
 
-                    //     return Center(
-                    //       child: Text(
-                    //         text,
-                    //         style: TextStyle(color: Colors.blue),
-                    //       ),
-                    //     );
-                    //   }
-                  }))),
-          Container(
-            color: Colors.cyan,
-            child: Image(image: NetworkImage(user!.photoURL!)),
-          ),
-        ],
+                            //     return Center(
+                            //       child: Text(
+                            //         text,
+                            //         style: TextStyle(color: Colors.blue),
+                            //       ),
+                            //     );
+                            //   }
+                          }))),
+                  Container(
+                    color: Colors.cyan,
+                    child: Image(image: NetworkImage(user!.photoURL!)),
+                  ),
+                ],
 
-        // child: Column(
-        //   children: [
-        //     Text(
-        //       'Profile',
-        //       style: TextStyle(fontSize: 24),
-        //     ),
-        //     SizedBox(
-        //       height: 32,
-        //     ),
-        //     CircleAvatar(
-        //       radius: 40,
-        //       backgroundImage: NetworkImage(user.photoUrl!),
-        //     ),
-        //     SizedBox(height: 8),
-        //     Text('Name: ' + user.displayName!)
-        //   ],
-        // )),
-      ),
+                // child: Column(
+                //   children: [
+                //     Text(
+                //       'Profile',
+                //       style: TextStyle(fontSize: 24),
+                //     ),
+                //     SizedBox(
+                //       height: 32,
+                //     ),
+                //     CircleAvatar(
+                //       radius: 40,
+                //       backgroundImage: NetworkImage(user.photoUrl!),
+                //     ),
+                //     SizedBox(height: 8),
+                //     Text('Name: ' + user.displayName!)
+                //   ],
+                // )
+              );
+            } else {
+              return CircularProgressIndicator();
+            }
+          }),
       floatingActionButton: FloatingActionButton(
         onPressed: () => checkEntryMadeToday(),
         // pageController.animateToPage(0,

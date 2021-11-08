@@ -16,6 +16,10 @@ class EntryTestDao {
     _entryRef = _entryRef.child(user!.uid);
   }
 
+  Query getQuery() {
+    return _entryRef;
+  }
+
   String getYearMonthDay() {
     DateTime date = new DateTime(
         DateTime.now().year, DateTime.now().month, DateTime.now().day);

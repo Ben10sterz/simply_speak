@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:simply_speak/database/entry_class_dao.dart';
@@ -33,6 +34,7 @@ class _HomepageState extends State<Homepage> {
       'assets/images/Red Smiley.png',
       'assets/images/Red Orange Smiley.png'
     ];
+    final query = entryDao.getQuery();
   }
 
   PageController pageController = PageController(initialPage: 1);
@@ -52,16 +54,18 @@ class _HomepageState extends State<Homepage> {
     return entryDao.wasEntryMadeTodayAlready();
   }
 
-  Future<List> _initGetDatabase(List list) async {
-    print("hit init GetDatabase");
-    return calendarList = [
-      'assets/images/Red Smiley.png',
-      'assets/images/Red Orange Smiley.png'
-    ];
-  }
+  // Stream<List> _initGetDatabase(List list) async {
+  //   print("hit init GetDatabase");
+  //   return calendarList = [
+  //     'assets/images/Red Smiley.png',
+  //     'assets/images/Red Orange Smiley.png'
+  //   ];
+  // }
 
   @override
   Widget build(BuildContext context) {
+    final database = FirebaseDatabase.instance.reference().child(user!.uid);
+
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: currentIndex,
@@ -108,13 +112,11 @@ class _HomepageState extends State<Homepage> {
           //     icon: ImageIcon(NetworkImage(user!.photoURL!)))
         ],
       ),
-      body: FutureBuilder(
-          future: _initGetDatabase(currentDateForCalendar),
-          builder: (
-            BuildContext context,
-            AsyncSnapshot<List> snapshot,
-          ) {
+      body: StreamBuilder(
+          stream: database.onValue,
+          builder: (context, snapshot) {
             if (snapshot.hasData) {
+              print(snapshot.data!.toString());
               return PageView(
                 controller: pageController,
                 onPageChanged: (page) {
@@ -148,7 +150,7 @@ class _HomepageState extends State<Homepage> {
                             print(date.toString());
                           },
                           onPageChanged: (date) {
-                            _initGetDatabase(currentDateForCalendar);
+                            //_initGetDatabase(currentDateForCalendar);
                             calendarList = [
                               'assets/images/Red Smiley.png',
                               'assets/images/Red Orange Smiley.png'
@@ -165,47 +167,14 @@ class _HomepageState extends State<Homepage> {
                                   print("hit me");
                                 },
                               ),
-                              // Text(
-                              //   text,
-                              //   style: TextStyle(color: Colors.red),
-                              // ),
                             );
-                            //          }
-                            //     dowBuilder: (context, day) {
-                            //   if (day.weekday == DateTime.sunday) {
-                            //     final text = DateFormat.E().format(day);
-
-                            //     return Center(
-                            //       child: Text(
-                            //         text,
-                            //         style: TextStyle(color: Colors.blue),
-                            //       ),
-                            //     );
-                            //   }
                           }))),
                   Container(
                     color: Colors.cyan,
                     child: Image(image: NetworkImage(user!.photoURL!)),
                   ),
                 ],
-
-                // child: Column(
-                //   children: [
-                //     Text(
-                //       'Profile',
-                //       style: TextStyle(fontSize: 24),
-                //     ),
-                //     SizedBox(
-                //       height: 32,
-                //     ),
-                //     CircleAvatar(
-                //       radius: 40,
                 //       backgroundImage: NetworkImage(user.photoUrl!),
-                //     ),
-                //     SizedBox(height: 8),
-                //     Text('Name: ' + user.displayName!)
-                //   ],
-                // )
               );
             } else {
               return CircularProgressIndicator();

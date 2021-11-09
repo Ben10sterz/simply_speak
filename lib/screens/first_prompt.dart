@@ -77,13 +77,15 @@ class _FirstPromptState extends State<FirstPrompt> {
   }
 
   void _deleteLast() async {
-    _fullSentence = _fullSentence.characters
-        .take(_fullLength - _lastLength.last)
-        .toString();
+    if (_fullSentence != '') {
+      _fullSentence = _fullSentence.characters
+          .take(_fullLength - _lastLength.last)
+          .toString();
 
-    _fullLength -= _lastLength.last;
-    _lastLength.removeLast();
-    setState(() {});
+      _fullLength -= _lastLength.last;
+      _lastLength.removeLast();
+      setState(() {});
+    }
   }
 
   void _sendMessage() {
@@ -111,9 +113,9 @@ class _FirstPromptState extends State<FirstPrompt> {
         child: Column(
           children: [
             Container(
-              height: 200.0,
+              height: 150.0,
               width: 250.0,
-              padding: EdgeInsets.only(top: 120),
+              padding: EdgeInsets.only(top: 60),
               // decoration:
               //     BoxDecoration(border: Border.all(color: Colors.black)),
               child: Column(
@@ -126,14 +128,19 @@ class _FirstPromptState extends State<FirstPrompt> {
               ),
             ),
             Container(
-              height: 100.0,
+              height: 150.0,
               width: 300.0,
               padding: EdgeInsets.only(top: 0),
               // decoration:
               //     BoxDecoration(border: Border.all(color: Colors.black)),
               child: Column(children: [
-                Text("This is where the prompt will be?",
-                    style: TextStyle(fontSize: 22), textAlign: TextAlign.center)
+                Text("Talk about your day.\n",
+                    style: TextStyle(fontSize: 22),
+                    textAlign: TextAlign.center),
+                Text(
+                    "Did you do anything special? How did you feel throughout the day? What brought you joy or displeasure?",
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center)
               ]),
             ),
             Container(

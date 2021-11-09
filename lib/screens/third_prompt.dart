@@ -78,13 +78,15 @@ class _ThirdPromptState extends State<ThirdPrompt> {
   }
 
   void _deleteLast() async {
-    _fullSentence = _fullSentence.characters
-        .take(_fullLength - _lastLength.last)
-        .toString();
+    if (_fullSentence != '') {
+      _fullSentence = _fullSentence.characters
+          .take(_fullLength - _lastLength.last)
+          .toString();
 
-    _fullLength -= _lastLength.last;
-    _lastLength.removeLast();
-    setState(() {});
+      _fullLength -= _lastLength.last;
+      _lastLength.removeLast();
+      setState(() {});
+    }
   }
 
   void _sendMessage() {
@@ -110,35 +112,40 @@ class _ThirdPromptState extends State<ThirdPrompt> {
         child: Column(
           children: [
             Container(
-              height: 200.0,
+              height: 150.0,
               width: 250.0,
-              padding: EdgeInsets.only(top: 120),
+              padding: EdgeInsets.only(top: 60),
               // decoration:
               //     BoxDecoration(border: Border.all(color: Colors.black)),
               child: Column(
                 children: [
                   Text(
-                    "Prompt #2",
+                    "Prompt #3",
                     style: TextStyle(fontSize: 20),
                   ),
                 ],
               ),
             ),
             Container(
-              height: 100.0,
+              height: 200.0,
               width: 300.0,
               padding: EdgeInsets.only(top: 0),
               // decoration:
               //     BoxDecoration(border: Border.all(color: Colors.black)),
               child: Column(children: [
-                Text("This is where the prompt will be?",
-                    style: TextStyle(fontSize: 22), textAlign: TextAlign.center)
+                Text("Talk about\nself-improvement.\n",
+                    style: TextStyle(fontSize: 22),
+                    textAlign: TextAlign.center),
+                Text(
+                    "What do you wish to improve upon? Could you have done anything better today?",
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center)
               ]),
             ),
             Container(
               height: 330.0,
               width: 350.0,
-              padding: EdgeInsets.only(top: 50),
+              padding: EdgeInsets.only(top: 10),
               // decoration:
               //     BoxDecoration(border: Border.all(color: Colors.black)),
               child: Column(
@@ -170,7 +177,9 @@ class _ThirdPromptState extends State<ThirdPrompt> {
                   //             ? 'Tap the microphone to start listening...'
                   //             : 'Speech not available')
                   //     .toString()),
-                  Spacer(),
+                  Container(
+                    height: 20.0,
+                  ),
                   Container(
                       height: 100.0,
                       width: 330.0,

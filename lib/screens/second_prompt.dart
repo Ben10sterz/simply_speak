@@ -78,13 +78,15 @@ class _SecondPromptState extends State<SecondPrompt> {
   }
 
   void _deleteLast() async {
-    _fullSentence = _fullSentence.characters
-        .take(_fullLength - _lastLength.last)
-        .toString();
+    if (_fullSentence != '') {
+      _fullSentence = _fullSentence.characters
+          .take(_fullLength - _lastLength.last)
+          .toString();
 
-    _fullLength -= _lastLength.last;
-    _lastLength.removeLast();
-    setState(() {});
+      _fullLength -= _lastLength.last;
+      _lastLength.removeLast();
+      setState(() {});
+    }
   }
 
   void _sendMessage() {
@@ -109,9 +111,9 @@ class _SecondPromptState extends State<SecondPrompt> {
         child: Column(
           children: [
             Container(
-              height: 200.0,
+              height: 150.0,
               width: 250.0,
-              padding: EdgeInsets.only(top: 120),
+              padding: EdgeInsets.only(top: 60),
               // decoration:
               //     BoxDecoration(border: Border.all(color: Colors.black)),
               child: Column(
@@ -124,20 +126,25 @@ class _SecondPromptState extends State<SecondPrompt> {
               ),
             ),
             Container(
-              height: 100.0,
+              height: 200.0,
               width: 300.0,
               padding: EdgeInsets.only(top: 0),
               // decoration:
               //     BoxDecoration(border: Border.all(color: Colors.black)),
               child: Column(children: [
-                Text("This is where the prompt will be?",
-                    style: TextStyle(fontSize: 22), textAlign: TextAlign.center)
+                Text("Talk about what\nyou appreciate.\n",
+                    style: TextStyle(fontSize: 22),
+                    textAlign: TextAlign.center),
+                Text(
+                    "What do you appreciate in your life? Did anything happen today that you might usually take for granted?",
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center)
               ]),
             ),
             Container(
               height: 330.0,
               width: 350.0,
-              padding: EdgeInsets.only(top: 50),
+              padding: EdgeInsets.only(top: 10),
               // decoration:
               //     BoxDecoration(border: Border.all(color: Colors.black)),
               child: Column(
@@ -169,7 +176,9 @@ class _SecondPromptState extends State<SecondPrompt> {
                   //             ? 'Tap the microphone to start listening...'
                   //             : 'Speech not available')
                   //     .toString()),
-                  Spacer(),
+                  Container(
+                    height: 20.0,
+                  ),
                   Container(
                       height: 100.0,
                       width: 330.0,

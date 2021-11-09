@@ -1,4 +1,8 @@
+import 'dart:async';
+
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:simply_speak/database/entry_class.dart';
 import 'package:simply_speak/screens/home_page.dart';
 
 import 'package:speech_to_text/speech_to_text.dart';
@@ -7,25 +11,26 @@ import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../database/entry_class_dao.dart';
 
-class EntryReview extends StatefulWidget {
+import 'package:intl/intl.dart';
+
+class SpecificEntryReview extends StatefulWidget {
   final EntryTestDao entryDao;
   final DateTime selectedDate;
-  EntryReview({Key? key, required this.entryDao, required this.selectedDate})
+  SpecificEntryReview(
+      {Key? key, required this.entryDao, required this.selectedDate})
       : super(key: key);
 
   @override
-  _EntryReviewState createState() => _EntryReviewState();
+  _SpecificEntryReviewState createState() => _SpecificEntryReviewState();
 }
 
-class _EntryReviewState extends State<EntryReview> {
+class _SpecificEntryReviewState extends State<SpecificEntryReview> {
   final user = FirebaseAuth.instance.currentUser;
 
-  void _sendMessage() {
-    widget.entryDao.saveEntry();
-
-    Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (context) => Homepage(),
-    ));
+  Entry entry = Entry('', '', '', '', '', '');
+  @override
+  void initState() {
+    _retrieveEntry(widget.selectedDate);
   }
 
   String getIcon() {
@@ -36,9 +41,79 @@ class _EntryReviewState extends State<EntryReview> {
       'assets/images/Yellow Green Smiley.png',
       'assets/images/Green Smiley.png'
     ];
-    print(urlList[int.parse(widget.entryDao.getRating()) - 1]);
-    return urlList[int.parse(widget.entryDao.getRating()) - 1];
+    //print(urlList[int.parse(widget.entryDao.getRating()) - 1]);
+    return 'assets/images/Green Smiley.png';
+    //return urlList[int.parse(entry.rating) - 1];
   }
+
+  //late Entry entry;
+
+  Future<bool> testFuture() async {
+    // if (entry.rating == '') {
+    //   return Future<bool>.value(false);
+    // } else {
+    print("no");
+    await new Future.delayed(const Duration(seconds: 1), () => "5");
+    print("yes");
+    return Future<bool>.value(true);
+    //}
+  }
+
+  void _retrieveEntry(DateTime selectedDate) {
+    FirebaseDatabase.instance
+        .reference()
+        .child(FirebaseAuth.instance.currentUser!.uid)
+        .once()
+        .then((snapshot) {
+      Map<dynamic, dynamic> values = snapshot.value;
+      for (var entries in values.values) {
+        final message = Entry.fromJson(entries);
+        var splitDate = message.date.split('-');
+
+        if (int.parse(splitDate[0]) == selectedDate.year) {
+          if (int.parse(splitDate[1]) == selectedDate.month) {
+            if (int.parse(splitDate[2]) == selectedDate.day) {
+              entry = message;
+              print(entry.entryOne);
+            }
+          }
+        }
+        //print(message.date);
+      }
+      //final entries = Entry.fromJson(snapshot.value);
+      //print(entries.date.toString());
+    });
+  }
+
+  // Future<Entry> _retrieveEntry2(DateTime selectedDate) async {
+  //   var entry2;
+  //   FirebaseDatabase.instance
+  //       .reference()
+  //       .child(FirebaseAuth.instance.currentUser!.uid)
+  //       .once()
+  //       .then((snapshot) {
+  //     Map<dynamic, dynamic> values = snapshot.value;
+  //     for (var entries in values.values) {
+  //       final message = Entry.fromJson(entries);
+  //       var splitDate = message.date.split('-');
+
+  //       if (int.parse(splitDate[0]) == selectedDate.year) {
+  //         if (int.parse(splitDate[1]) == selectedDate.month) {
+  //           if (int.parse(splitDate[2]) == selectedDate.day) {
+  //             entry2 = message;
+  //             //return FutureOr<Entry>.onValue(entry);
+  //           }
+  //         }
+  //       }
+  //       //print(message.date);
+  //     }
+  //     //final entries = Entry.fromJson(snapshot.value);
+  //     //print(entries.date.toString());
+  //   });
+  //   print(selectedDate);
+  //   print(entry.date);
+  //   return Future<Entry>.value(entry2);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -46,173 +121,160 @@ class _EntryReviewState extends State<EntryReview> {
         appBar: AppBar(
           title: Text('Simply Speak'),
         ),
-        body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          physics: ScrollPhysics(),
-          child: Container(
-              child: Center(
-            child: Column(
-              children: [
-                Container(
-                  height: 100.0,
-                  width: 250.0,
-                  padding: EdgeInsets.only(top: 20),
-                  // decoration:
-                  //     BoxDecoration(border: Border.all(color: Colors.black)),
-                  child: Column(
-                    children: [
-                      Text(
-                        "Review your Entry",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 100.0,
-                  width: 300.0,
-                  padding: EdgeInsets.only(top: 0),
-                  // decoration:
-                  //     BoxDecoration(border: Border.all(color: Colors.black)),
-                  child: (SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      physics: ScrollPhysics(),
-                      child: Text(
-                        widget.entryDao.getTitle(),
-                        style: TextStyle(
-                          fontSize: 25,
-                          decoration: TextDecoration.underline,
-                        ),
-                        textAlign: TextAlign.center,
-                      ))),
-                ),
-                Container(
-                  height: 850.0,
-                  width: 350.0,
-                  //padding: EdgeInsets.only(top: 0),
-                  // decoration:
-                  //     BoxDecoration(border: Border.all(color: Colors.black)),
-                  child: Column(
-                    children: [
-                      Container(
-                          height: 40.0,
-                          width: 330.0,
-                          //padding: EdgeInsets.only(top: 0),
-                          // decoration: BoxDecoration(
-                          //     border: Border.all(color: Colors.black)),
-                          child: Text(
-                            "This is the area for prompt #1",
-                            style: TextStyle(fontSize: 20),
-                            textAlign: TextAlign.center,
-                          )),
-                      Container(
-                        height: 100.0,
-                        width: 300.0,
-                        padding: EdgeInsets.only(top: 0),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black)),
-                        child: (SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            physics: ScrollPhysics(),
-                            child: Text(widget.entryDao.getPrompt(1),
-                                style: TextStyle(fontSize: 18),
-                                textAlign: TextAlign.center))),
-                      ),
-                      Spacer(),
-                      Container(
-                          height: 60.0,
-                          width: 330.0,
-                          padding: EdgeInsets.only(top: 20),
-                          // decoration: BoxDecoration(
-                          //     border: Border.all(color: Colors.black)),
-                          child: Text(
-                            "This is the area for prompt #2",
-                            style: TextStyle(fontSize: 20),
-                            textAlign: TextAlign.center,
-                          )),
-                      Container(
-                        height: 100.0,
-                        width: 300.0,
-                        padding: EdgeInsets.only(top: 0),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black)),
-                        child: (SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            physics: ScrollPhysics(),
-                            child: Text(widget.entryDao.getPrompt(2),
-                                style: TextStyle(fontSize: 18),
-                                textAlign: TextAlign.center))),
-                      ),
-                      Spacer(),
-                      Container(
-                          height: 60.0,
-                          width: 330.0,
-                          padding: EdgeInsets.only(top: 20),
-                          // decoration: BoxDecoration(
-                          //     border: Border.all(color: Colors.black)),
-                          child: Text(
-                            "This is the area for prompt #3",
-                            style: TextStyle(fontSize: 20),
-                            textAlign: TextAlign.center,
-                          )),
-                      Container(
-                        height: 100.0,
-                        width: 300.0,
-                        padding: EdgeInsets.only(top: 0),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black)),
-                        child: (SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            physics: ScrollPhysics(),
-                            child: Text(widget.entryDao.getPrompt(3),
-                                style: TextStyle(fontSize: 18),
-                                textAlign: TextAlign.center))),
-                      ),
-                      Container(
-                          width: 330,
-                          height: 125,
-                          // decoration: BoxDecoration(
-                          //     border: Border.all(color: Colors.black)),
+        body: FutureBuilder(
+            future: testFuture(),
+            builder: (context, snapshot) {
+              if (snapshot.data == true) {
+                return SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  physics: ScrollPhysics(),
+                  child: Container(
+                      child: Center(
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 100.0,
+                          width: 300.0,
                           padding: EdgeInsets.only(top: 30),
-                          child: Image(
-                            width: 50,
-                            height: 50,
-                            image: AssetImage(getIcon()),
-                            //size: 50,
-                          )),
-                      Spacer(),
-                      Container(
-                          height: 100.0,
-                          width: 330.0,
-                          padding: EdgeInsets.only(top: 0),
-                          // decoration: BoxDecoration(
-                          //     border: Border.all(color: Colors.black)),
-                          alignment: Alignment.bottomCenter,
-                          child: ElevatedButton(
-                              onPressed: _sendMessage,
-                              child: Icon(Icons.save),
-                              style: ElevatedButton.styleFrom(
-                                  fixedSize: Size(75, 50))
-                              // ElevatedButton(
-                              //   onPressed: () => entryDao.checkForVal(),
-                              //   child: Text('Check'),
-                              // )
-                              )),
-                      Container(
-                          height: 100.0,
-                          width: 330.0,
-                          padding: EdgeInsets.only(top: 10),
-                          child: Text(
-                              "WARNING!\n You will be unable to make changes after saving.",
-                              style: TextStyle(fontSize: 13),
-                              textAlign: TextAlign.center)),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          )),
-        ));
+                          // decoration:
+                          //     BoxDecoration(border: Border.all(color: Colors.black)),
+                          child: (SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              physics: ScrollPhysics(),
+                              child: Text(
+                                entry.title,
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  decoration: TextDecoration.underline,
+                                ),
+                                textAlign: TextAlign.center,
+                              ))),
+                        ),
+                        Container(
+                          height: 850.0,
+                          width: 350.0,
+                          //padding: EdgeInsets.only(top: 0),
+                          // decoration:
+                          //     BoxDecoration(border: Border.all(color: Colors.black)),
+                          child: Column(
+                            children: [
+                              Container(
+                                  height: 40.0,
+                                  width: 330.0,
+                                  //padding: EdgeInsets.only(top: 0),
+                                  // decoration: BoxDecoration(
+                                  //     border: Border.all(color: Colors.black)),
+                                  child: Text(
+                                    "#1 Daily Log Prompt",
+                                    style: TextStyle(fontSize: 20),
+                                    textAlign: TextAlign.center,
+                                  )),
+                              Container(
+                                height: 100.0,
+                                width: 300.0,
+                                padding: EdgeInsets.only(top: 0),
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black)),
+                                child: (SingleChildScrollView(
+                                    scrollDirection: Axis.vertical,
+                                    physics: ScrollPhysics(),
+                                    child: Text(entry.entryOne,
+                                        style: TextStyle(fontSize: 14),
+                                        textAlign: TextAlign.center))),
+                              ),
+                              Spacer(),
+                              Container(
+                                  height: 60.0,
+                                  width: 330.0,
+                                  padding: EdgeInsets.only(top: 20),
+                                  // decoration: BoxDecoration(
+                                  //     border: Border.all(color: Colors.black)),
+                                  child: Text(
+                                    "#2 Appreciation Prompt",
+                                    style: TextStyle(fontSize: 20),
+                                    textAlign: TextAlign.center,
+                                  )),
+                              Container(
+                                height: 100.0,
+                                width: 300.0,
+                                padding: EdgeInsets.only(top: 0),
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black)),
+                                child: (SingleChildScrollView(
+                                    scrollDirection: Axis.vertical,
+                                    physics: ScrollPhysics(),
+                                    child: Text(entry.entryTwo,
+                                        style: TextStyle(fontSize: 14),
+                                        textAlign: TextAlign.center))),
+                              ),
+                              Spacer(),
+                              Container(
+                                  height: 60.0,
+                                  width: 330.0,
+                                  padding: EdgeInsets.only(top: 20),
+                                  // decoration: BoxDecoration(
+                                  //     border: Border.all(color: Colors.black)),
+                                  child: Text(
+                                    "#3 Improvement Prompt",
+                                    style: TextStyle(fontSize: 20),
+                                    textAlign: TextAlign.center,
+                                  )),
+                              Container(
+                                height: 100.0,
+                                width: 300.0,
+                                padding: EdgeInsets.only(top: 0),
+                                decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.black)),
+                                child: (SingleChildScrollView(
+                                    scrollDirection: Axis.vertical,
+                                    physics: ScrollPhysics(),
+                                    child: Text(entry.entryThree,
+                                        style: TextStyle(fontSize: 14),
+                                        textAlign: TextAlign.center))),
+                              ),
+                              Container(
+                                  width: 330,
+                                  height: 125,
+                                  // decoration: BoxDecoration(
+                                  //     border: Border.all(color: Colors.black)),
+                                  padding: EdgeInsets.only(top: 30),
+                                  child: Image(
+                                    width: 50,
+                                    height: 50,
+                                    image: AssetImage(getIcon()),
+                                    //size: 50,
+                                  )),
+                              Spacer(),
+                              Container(
+                                  height: 100.0,
+                                  width: 330.0,
+                                  padding: EdgeInsets.only(top: 0),
+                                  // decoration: BoxDecoration(
+                                  //     border: Border.all(color: Colors.black)),
+                                  alignment: Alignment.bottomCenter,
+                                  child: ElevatedButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(),
+                                      child: Icon(Icons.arrow_back_rounded),
+                                      style: ElevatedButton.styleFrom(
+                                          fixedSize: Size(75, 50))
+                                      // ElevatedButton(
+                                      //   onPressed: () => entryDao.checkForVal(),
+                                      //   child: Text('Check'),
+                                      // )
+                                      )),
+                              Spacer()
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  )),
+                );
+              } else {
+                print("doesn it ever ggo here");
+                return Center(child: CircularProgressIndicator());
+              }
+            }));
   }
 }

@@ -7,6 +7,7 @@ import 'package:simply_speak/database/entry_class.dart';
 import 'package:simply_speak/database/entry_class_dao.dart';
 import 'package:simply_speak/screens/first_prompt.dart';
 import 'package:simply_speak/screens/information_page.dart';
+import 'package:simply_speak/screens/specific_entry_review.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -87,11 +88,8 @@ class _HomepageState extends State<Homepage> {
   }
 
   Future<bool> testFuture() async {
-    if (calendarList == []) {
-      return Future<bool>.value(false);
-    } else {
-      return Future<bool>.value(true);
-    }
+    await Future.delayed(const Duration(milliseconds: 500), () => "5");
+    return Future<bool>.value(true);
   }
 
   // Stream<List> _initGetDatabase(List list) async {
@@ -196,6 +194,8 @@ class _HomepageState extends State<Homepage> {
                             onPageChanged: (date) {
                               print(date.month.toString());
                               _performSingleMonthFetch(date.month.toString());
+                              Future.delayed(
+                                  const Duration(milliseconds: 500), () => "5");
                             },
                             calendarBuilders: CalendarBuilders(
                                 defaultBuilder: (context, day, currentDay) {
@@ -219,12 +219,17 @@ class _HomepageState extends State<Homepage> {
                                             icon: Image.asset(facesList[
                                                 int.parse(ratingsList[i])]),
                                             onPressed: () {
-                                              print("Day 1: " +
-                                                  day.day.toString());
-                                              //print(calendarList[day.day]);
-                                              print("hit me");
+                                              Navigator.of(context)
+                                                  .push(MaterialPageRoute(
+                                                builder: (context) =>
+                                                    SpecificEntryReview(
+                                                  entryDao: entryDao,
+                                                  selectedDate: day,
+                                                ),
+                                              ));
                                             },
                                           ),
+                                          Spacer(),
                                           Text(day.day.toString())
                                         ],
                                       );
@@ -234,6 +239,9 @@ class _HomepageState extends State<Homepage> {
 
                                 i++;
                               }
+                              return Column(
+                                children: [Spacer(), Text(day.day.toString())],
+                              );
                             })));
                   } else {
                     return Center(child: CircularProgressIndicator());
@@ -247,16 +255,16 @@ class _HomepageState extends State<Homepage> {
         ],
         //       backgroundImage: NetworkImage(user.photoUrl!),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => CalanderTest(),
-        )),
-        // pageController.animateToPage(0,
-        //     duration: Duration(milliseconds: 250), curve: Curves.bounceIn),
-        child: const Icon(Icons.mic),
-        backgroundColor: Colors.cyan,
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () =>
+      //       Navigator.of(context).pushReplacement(MaterialPageRoute(
+      //     builder: (context) => CalanderTest(),
+      //   )),
+      //   // pageController.animateToPage(0,
+      //   //     duration: Duration(milliseconds: 250), curve: Curves.bounceIn),
+      //   child: const Icon(Icons.mic),
+      //   backgroundColor: Colors.cyan,
+      // ),
     );
   }
 

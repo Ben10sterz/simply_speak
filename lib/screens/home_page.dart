@@ -16,6 +16,7 @@ import 'package:intl/intl.dart';
 
 import 'sign_in_page.dart';
 import '../api/google_sign_in_2.dart';
+import 'calander_testing_page.dart';
 
 class Homepage extends StatefulWidget {
   @override
@@ -116,7 +117,7 @@ class _HomepageState extends State<Homepage> {
           stream: database.onValue,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              print(snapshot.data!.toString());
+              //print(snapshot.data!.toString());
               return PageView(
                 controller: pageController,
                 onPageChanged: (page) {
@@ -181,7 +182,10 @@ class _HomepageState extends State<Homepage> {
             }
           }),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => checkEntryMadeToday(),
+        onPressed: () =>
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => CalanderTest(),
+        )),
         // pageController.animateToPage(0,
         //     duration: Duration(milliseconds: 250), curve: Curves.bounceIn),
         child: const Icon(Icons.mic),

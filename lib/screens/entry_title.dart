@@ -71,13 +71,15 @@ class _EntryTitleState extends State<EntryTitle> {
   }
 
   void _deleteLast() async {
-    _fullSentence = _fullSentence.characters
-        .take(_fullLength - _lastLength.last)
-        .toString();
+    if (_fullSentence != '') {
+      _fullSentence = _fullSentence.characters
+          .take(_fullLength - _lastLength.last)
+          .toString();
 
-    _fullLength -= _lastLength.last;
-    _lastLength.removeLast();
-    setState(() {});
+      _fullLength -= _lastLength.last;
+      _lastLength.removeLast();
+      setState(() {});
+    }
   }
 
   void _sendMessage() {

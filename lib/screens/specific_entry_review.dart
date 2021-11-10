@@ -42,8 +42,8 @@ class _SpecificEntryReviewState extends State<SpecificEntryReview> {
       'assets/images/Green Smiley.png'
     ];
     //print(urlList[int.parse(widget.entryDao.getRating()) - 1]);
-    return 'assets/images/Green Smiley.png';
-    //return urlList[int.parse(entry.rating) - 1];
+    //return 'assets/images/Green Smiley.png';
+    return urlList[int.parse(entry.rating) - 1];
   }
 
   //late Entry entry;

@@ -165,15 +165,30 @@ class _HomepageState extends State<Homepage> {
           });
         },
         children: [
-          Container(
-            color: Colors.white,
-            child: Column(
-              children: [
-                ElevatedButton(
-                  onPressed: beginEntry,
-                  child: Icon(entryMadeToday ? Icons.mic_off : Icons.mic),
-                )
-              ],
+          Center(
+            child: Container(
+              height: 500.00,
+              width: 700.00,
+              padding: EdgeInsets.only(top: 100),
+              // color: Colors.white,
+              child: Column(
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        fixedSize: Size(100, 50),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50))),
+                    onPressed: beginEntry,
+                    child: Icon(
+                      entryMadeToday ? Icons.mic_off : Icons.mic,
+                    ),
+                  ),
+                  Text(
+                    entryMadeToday ? "Entry already made today" : "",
+                    style: TextStyle(color: Colors.grey),
+                  )
+                ],
+              ),
             ),
           ),
           /////////////////////////////////////////////////////////////////////////////

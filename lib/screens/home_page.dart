@@ -47,6 +47,7 @@ class _HomepageState extends State<Homepage> {
   List<String> facesList = [];
   List<String> ratingsList = [];
   List<String> calendarList = [];
+  bool entryMadeToday = false;
 
   PageController pageController = PageController(initialPage: 1);
   int currentIndex = 1;
@@ -65,6 +66,7 @@ class _HomepageState extends State<Homepage> {
   }
 
   void _performEntryFetch(String month) {
+    entryMadeToday = false;
     FirebaseDatabase.instance
         .reference()
         .child(FirebaseAuth.instance.currentUser!.uid)
@@ -74,8 +76,18 @@ class _HomepageState extends State<Homepage> {
       for (var entries in values.values) {
         final message = Entry.fromJson(entries);
 
+        var splitDate = message.date.split('-');
+
         calendarList.add(message.date);
         ratingsList.add((int.parse(message.rating) - 1).toString());
+
+        if (int.parse(splitDate[0]) == DateTime.now().year) {
+          if (int.parse(splitDate[1]) == DateTime.now().month) {
+            if (int.parse(splitDate[2]) == DateTime.now().day) {
+              entryMadeToday = true;
+            }
+          }
+        }
       }
       //final entries = Entry.fromJson(snapshot.value);
       //print(entries.date.toString());
@@ -154,20 +166,19 @@ class _HomepageState extends State<Homepage> {
         },
         children: [
           Container(
-            color: Colors.amber,
+            color: Colors.white,
             child: Column(
               children: [
                 ElevatedButton(
                   onPressed: beginEntry,
-                  child: Icon(
-                      // checkEntryMadeToday() ? Icons.mic :
-                      Icons.mic_off),
+                  child: Icon(entryMadeToday ? Icons.mic_off : Icons.mic),
                 )
               ],
             ),
           ),
+          /////////////////////////////////////////////////////////////////////////////
           Container(
-            color: Colors.blue,
+            color: Colors.white,
             child: FutureBuilder(
                 future: testFuture(),
                 builder: (context, snapshot) {
@@ -175,69 +186,80 @@ class _HomepageState extends State<Homepage> {
                     return Center(
                         heightFactor: 300.0,
                         child: TableCalendar(
-                            rowHeight: 75.00,
-                            daysOfWeekHeight: 20.00,
-                            firstDay: DateTime(2021, 11, 1),
-                            lastDay: DateTime.now()
-                                .add(const Duration(days: 5 * 365)),
-                            focusedDay: DateTime.now(),
-                            dayHitTestBehavior: HitTestBehavior.translucent,
-                            onDaySelected: (date, event) {
-                              print(calendarList);
-                              //print(date.toString());
-                            },
-                            onPageChanged: (date) {
-                              // print(date.month.toString());
-                              // _performEntryFetch(date.month.toString());
-                              // Future.delayed(
-                              //     const Duration(milliseconds: 500), () => "5");
-                            },
-                            calendarBuilders: CalendarBuilders(
-                                defaultBuilder: (context, day, currentDay) {
-                              var i = 0;
-                              print(calendarList);
-                              for (var item in calendarList) {
-                                var splitDate = item.split('-');
+                          calendarStyle:
+                              CalendarStyle(isTodayHighlighted: false),
+                          headerStyle: HeaderStyle(
+                              titleCentered: true, formatButtonVisible: false),
+                          rowHeight: 75.00,
+                          daysOfWeekHeight: 20.00,
+                          firstDay: DateTime(2021, 01, 01),
+                          lastDay:
+                              DateTime.now().add(const Duration(days: 5 * 365)),
+                          focusedDay: DateTime.now(),
+                          dayHitTestBehavior: HitTestBehavior.translucent,
+                          onPageChanged: (date) {
+                            // print(date.month.toString());
+                            // _performEntryFetch(date.month.toString());
+                            // Future.delayed(
+                            //     const Duration(milliseconds: 500), () => "5");
+                          },
+                          calendarBuilders: CalendarBuilders(
+                              defaultBuilder: (context, day, currentDay) {
+                            var i = 0;
+                            print(calendarList);
+                            for (var item in calendarList) {
+                              var splitDate = item.split('-');
 
-                                // print("Wahat im looking for" +
-                                //     facesList[int.parse(ratingsList[i])]);
+                              // print("Wahat im looking for" +
+                              //     facesList[int.parse(ratingsList[i])]);
 
-                                // print(day.month);
-                                // print(splitDate[2]);
+                              // print(day.month);
+                              // print(splitDate[2]);
 
-                                if (day.year.toString() == splitDate[0]) {
-                                  if (day.month.toString() == splitDate[1]) {
-                                    if (day.day == int.parse(splitDate[2])) {
-                                      return Column(
-                                        children: [
-                                          IconButton(
-                                            icon: Image.asset(facesList[
-                                                int.parse(ratingsList[i])]),
-                                            onPressed: () {
-                                              Navigator.of(context)
-                                                  .push(MaterialPageRoute(
-                                                builder: (context) =>
-                                                    SpecificEntryReview(
-                                                  entryDao: entryDao,
-                                                  selectedDate: day,
-                                                ),
-                                              ));
-                                            },
-                                          ),
-                                          Spacer(),
-                                          Text(day.day.toString())
-                                        ],
-                                      );
-                                    }
+                              if (day.year.toString() == splitDate[0]) {
+                                if (day.month.toString() == splitDate[1]) {
+                                  if (day.day == int.parse(splitDate[2])) {
+                                    return Column(
+                                      children: [
+                                        IconButton(
+                                          icon: Image.asset(facesList[
+                                              int.parse(ratingsList[i])]),
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .push(MaterialPageRoute(
+                                              builder: (context) =>
+                                                  SpecificEntryReview(
+                                                entryDao: entryDao,
+                                                selectedDate: day,
+                                              ),
+                                            ));
+                                          },
+                                        ),
+                                        Spacer(),
+                                        Text(day.day.toString())
+                                      ],
+                                    );
                                   }
                                 }
-
-                                i++;
                               }
-                              return Column(
-                                children: [Spacer(), Text(day.day.toString())],
-                              );
-                            })));
+
+                              i++;
+                            }
+                            return Column(
+                              children: [Spacer(), Text(day.day.toString())],
+                            );
+                          }, outsideBuilder: (context, day, currentDay) {
+                            return Column(
+                              children: [
+                                Spacer(),
+                                Text(
+                                  day.day.toString(),
+                                  style: TextStyle(color: Colors.grey),
+                                )
+                              ],
+                            );
+                          }),
+                        ));
                   } else {
                     return Center(child: CircularProgressIndicator());
                   }

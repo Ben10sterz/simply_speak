@@ -41,8 +41,7 @@ class _HomepageState extends State<Homepage> {
       'assets/images/Green Smiley.png',
     ];
 
-    _performSingleMonthFetch(DateTime.now().month.toString());
-    final query = entryDao.getQuery();
+    _performEntryFetch(DateTime.now().month.toString());
   }
 
   List<String> facesList = [];
@@ -65,7 +64,7 @@ class _HomepageState extends State<Homepage> {
     return entryDao.wasEntryMadeTodayAlready();
   }
 
-  void _performSingleMonthFetch(String month) {
+  void _performEntryFetch(String month) {
     FirebaseDatabase.instance
         .reference()
         .child(FirebaseAuth.instance.currentUser!.uid)
@@ -74,13 +73,9 @@ class _HomepageState extends State<Homepage> {
       Map<dynamic, dynamic> values = snapshot.value;
       for (var entries in values.values) {
         final message = Entry.fromJson(entries);
-        var splitDate = message.date.split('-');
 
-        if (splitDate[1] == month) {
-          calendarList.add(message.date);
-          ratingsList.add((int.parse(message.rating) - 1).toString());
-        }
-        //print(message.date);
+        calendarList.add(message.date);
+        ratingsList.add((int.parse(message.rating) - 1).toString());
       }
       //final entries = Entry.fromJson(snapshot.value);
       //print(entries.date.toString());
@@ -192,10 +187,10 @@ class _HomepageState extends State<Homepage> {
                               //print(date.toString());
                             },
                             onPageChanged: (date) {
-                              print(date.month.toString());
-                              _performSingleMonthFetch(date.month.toString());
-                              Future.delayed(
-                                  const Duration(milliseconds: 500), () => "5");
+                              // print(date.month.toString());
+                              // _performEntryFetch(date.month.toString());
+                              // Future.delayed(
+                              //     const Duration(milliseconds: 500), () => "5");
                             },
                             calendarBuilders: CalendarBuilders(
                                 defaultBuilder: (context, day, currentDay) {

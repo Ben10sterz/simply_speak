@@ -2,6 +2,7 @@
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:simply_speak/database/entry_class.dart';
 import 'package:simply_speak/database/entry_class_dao.dart';
@@ -122,12 +123,12 @@ class _HomepageState extends State<Homepage> {
           },
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.mic),
-              label: "Record",
-            ),
-            BottomNavigationBarItem(
               icon: Icon(Icons.calendar_today),
               label: "Calendar",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.mic),
+              label: "Record",
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.dashboard),
@@ -165,33 +166,6 @@ class _HomepageState extends State<Homepage> {
           });
         },
         children: [
-          Center(
-            child: Container(
-              height: 500.00,
-              width: 700.00,
-              padding: EdgeInsets.only(top: 100),
-              // color: Colors.white,
-              child: Column(
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        fixedSize: Size(100, 50),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50))),
-                    onPressed: beginEntry,
-                    child: Icon(
-                      entryMadeToday ? Icons.mic_off : Icons.mic,
-                    ),
-                  ),
-                  Text(
-                    entryMadeToday ? "Entry already made today" : "",
-                    style: TextStyle(color: Colors.grey),
-                  )
-                ],
-              ),
-            ),
-          ),
-          /////////////////////////////////////////////////////////////////////////////
           Container(
             color: Colors.white,
             child: FutureBuilder(
@@ -280,8 +254,45 @@ class _HomepageState extends State<Homepage> {
                   }
                 }),
           ),
+          Center(
+            child: Container(
+              height: 300.00,
+              width: 700.00,
+              padding: EdgeInsets.only(top: 100),
+              child: Column(
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        fixedSize: Size(100, 50),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50))),
+                    onPressed: beginEntry,
+                    child: Icon(
+                      entryMadeToday ? Icons.mic_off : Icons.mic,
+                    ),
+                  ),
+                  Container(
+                    height: 10.00,
+                    padding: EdgeInsets.only(top: 100),
+                  ),
+                  Text(
+                    entryMadeToday
+                        ? "Entry already made today"
+                        : "Begin your entry for today",
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          /////////////////////////////////////////////////////////////////////////////
+
           Container(
-            color: Colors.cyan,
+            color: Colors.white,
             child: Image(image: NetworkImage(user!.photoURL!)),
           ),
         ],

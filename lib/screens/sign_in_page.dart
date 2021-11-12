@@ -16,51 +16,50 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Log-In'),
+          title: Text('Simply Speak'),
           centerTitle: true,
         ),
-        body: Column(children: [
-          Container(
-            height: 300.0,
-            width: 250.0,
-            padding: EdgeInsets.only(top: 100),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(200),
-              //color: const Color(0xff7c94b6),
-            ),
-            child: Center(
-              child: Image.asset('assets/images/UpdatedSimplySpeakLogo.png'),
-            ),
-          ),
-          Container(
-            child: Center(
-                child: TextButton(
-                    onPressed: () {
-                      final provider = Provider.of<GoogleSignInProvider>(
-                          context,
-                          listen: false);
-                      provider.googleLogin();
-                    },
-                    child: Text('Login'))),
-          ),
-          Container(
-            child: Center(
-                child: TextButton(
-                    onPressed: skipLogin, child: Text('Skip Login'))),
-          ),
-          Container(
-            padding: EdgeInsets.only(top: 100),
-            child: SignInButton(Buttons.Google, onPressed: () {
-              //waitingForSignin();
-              final provider =
-                  Provider.of<GoogleSignInProvider>(context, listen: false);
-              provider.googleLogin();
-              // Navigator.of(context).pushReplacement(MaterialPageRoute(
-              //   builder: (context) => Homepage(),
-              // ));
-            }),
-          )
-        ]));
+        body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                height: 300.0,
+                width: 250.0,
+                padding: EdgeInsets.only(top: 100),
+                decoration: BoxDecoration(
+                    //borderRadius: BorderRadius.circular(200),
+                    //color: const Color(0xff7c94b6),
+                    ),
+                child: Column(
+                  children: [
+                    Image.asset(
+                      'assets/images/Updated Simply Speak Logo.png',
+                      scale: 1,
+                    ),
+                  ],
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                ),
+              ),
+              Container(
+                height: 300.0,
+                width: 250.0,
+                padding: EdgeInsets.only(top: 100),
+                decoration: BoxDecoration(
+                  //borderRadius: BorderRadius.circular(200),
+                  color: const Color(0xff7c94b6),
+                ),
+                child: SignInButton(Buttons.Google, onPressed: () {
+                  //waitingForSignin();
+                  final provider =
+                      Provider.of<GoogleSignInProvider>(context, listen: false);
+                  provider.googleLogin();
+                  // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  //   builder: (context) => Homepage(),
+                  // ));
+                }),
+              )
+            ]));
   }
 
   Future signIn() async {

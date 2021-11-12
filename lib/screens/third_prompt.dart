@@ -205,7 +205,10 @@ class _ThirdPromptState extends State<ThirdPrompt> {
                                       ? Icons.mic
                                       : Icons.mic_off),
                                   style: ElevatedButton.styleFrom(
-                                      shape: CircleBorder()))),
+                                      shape: CircleBorder(),
+                                      primary: _speechToText.isListening
+                                          ? Colors.red
+                                          : Colors.blue))),
                           ElevatedButton(
                               onPressed: _sendMessage,
                               child: Icon(Icons.arrow_right_alt)

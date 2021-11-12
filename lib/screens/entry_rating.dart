@@ -20,7 +20,7 @@ class _EntryRatingState extends State<EntryRating> {
 
   String rating = '';
 
-  List<bool> selectedRating = [false, false, false, false, false];
+  List<bool> selectedRating = [false, false, true, false, false];
 
   void _sendMessage() {
     widget.entryDao.setRating(rating);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simply_speak/screens/home_page.dart';
 
 import 'package:speech_to_text/speech_to_text.dart';
@@ -17,8 +18,17 @@ class EntryReview extends StatefulWidget {
 
 class _EntryReviewState extends State<EntryReview> {
   final user = FirebaseAuth.instance.currentUser;
+  DateTime today =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
+  void setPreferencesAndTodaysDate() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    prefs.setString("lastEntry", today.toString());
+  }
 
   void _sendMessage() {
+    setPreferencesAndTodaysDate();
     widget.entryDao.saveEntry();
 
     Navigator.of(context).pushReplacement(MaterialPageRoute(

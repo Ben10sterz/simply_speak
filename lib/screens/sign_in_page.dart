@@ -19,10 +19,11 @@ class _SignInScreenState extends State<SignInScreen> {
           title: Text('Simply Speak'),
           centerTitle: true,
         ),
-        body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+        body: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
               Container(
                 height: 300.0,
                 width: 250.0,
@@ -42,13 +43,13 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
               ),
               Container(
-                height: 300.0,
+                height: 100.0,
                 width: 250.0,
-                padding: EdgeInsets.only(top: 100),
+                padding: EdgeInsets.only(top: 50),
                 decoration: BoxDecoration(
-                  //borderRadius: BorderRadius.circular(200),
-                  color: const Color(0xff7c94b6),
-                ),
+                    //borderRadius: BorderRadius.circular(200),
+                    //color: const Color(0xff7c94b6),
+                    ),
                 child: SignInButton(Buttons.Google, onPressed: () {
                   //waitingForSignin();
                   final provider =
@@ -59,7 +60,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   // ));
                 }),
               )
-            ]));
+            ])));
   }
 
   Future signIn() async {

@@ -29,7 +29,7 @@ class _SignInScreenState extends State<SignInScreen> {
               //color: const Color(0xff7c94b6),
             ),
             child: Center(
-              child: Image.asset('assets/images/SimplySpeakLogo.png'),
+              child: Image.asset('assets/images/UpdatedSimplySpeakLogo.png'),
             ),
           ),
           Container(

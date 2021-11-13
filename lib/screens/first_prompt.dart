@@ -105,125 +105,128 @@ class _FirstPromptState extends State<FirstPrompt> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Simply Speak'),
-      ),
-      body: Container(
-          child: Center(
-        child: Column(
-          children: [
-            Container(
-              height: 150.0,
-              width: 250.0,
-              padding: EdgeInsets.only(top: 60),
-              // decoration:
-              //     BoxDecoration(border: Border.all(color: Colors.black)),
-              child: Column(
-                children: [
-                  Text(
-                    "Prompt #1",
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              height: 150.0,
-              width: 300.0,
-              padding: EdgeInsets.only(top: 0),
-              // decoration:
-              //     BoxDecoration(border: Border.all(color: Colors.black)),
-              child: Column(children: [
-                Text("Talk about your day.\n",
-                    style: TextStyle(fontSize: 22),
-                    textAlign: TextAlign.center),
-                Text(
-                    "Did you do anything special? How did you feel throughout the day? What brought you joy or displeasure?",
-                    style: TextStyle(fontSize: 16),
-                    textAlign: TextAlign.center)
-              ]),
-            ),
-            Container(
-              height: 330.0,
-              width: 350.0,
-              padding: EdgeInsets.only(top: 50),
-              // decoration:
-              //     BoxDecoration(border: Border.all(color: Colors.black)),
-              child: Column(
-                children: [
-                  Container(
-                    height: 150.0,
-                    width: 330.0,
-                    padding: EdgeInsets.only(top: 0),
-                    decoration:
-                        BoxDecoration(border: Border.all(color: Colors.black)),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      physics: ScrollPhysics(),
-                      child: Text(
-                        (_speechToText.isListening
-                                ? '$_fullSentence' '$_lastWords'
-                                : _speechEnabled
-                                    ? '$_fullSentence'
-                                    : 'Speech not available')
-                            .toString(),
-                        style: TextStyle(fontSize: 15),
-                      ),
-                      //padding: const EdgeInsets.all(8.0),
-                    ),
-                  ),
-                  // Text((_speechToText.isListening
-                  //         ? '$_fullSentence' '$_lastWords'
-                  //         : _speechEnabled
-                  //             ? 'Tap the microphone to start listening...'
-                  //             : 'Speech not available')
-                  //     .toString()),
-                  Spacer(),
-                  Container(
-                      height: 100.0,
-                      width: 330.0,
-                      padding: EdgeInsets.only(top: 0),
-                      // decoration: BoxDecoration(
-                      //     border: Border.all(color: Colors.black)),
-                      alignment: Alignment.bottomCenter,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ElevatedButton(
-                              onPressed: _deleteLast,
-                              child: Icon(Icons.backspace)),
-                          Container(
-                              height: 65.0,
-                              width: 85.0,
-                              padding: EdgeInsets.only(top: 0),
-                              child: ElevatedButton(
-                                  onPressed: _speechToText.isNotListening
-                                      ? _startListening
-                                      : _stopListening,
-                                  child: Icon(_speechToText.isNotListening
-                                      ? Icons.mic
-                                      : Icons.mic_off),
-                                  style: ElevatedButton.styleFrom(
-                                      shape: CircleBorder(),
-                                      primary: _speechToText.isListening
-                                          ? Colors.red
-                                          : Colors.blue))),
-                          ElevatedButton(
-                              onPressed: _sendMessage,
-                              child: Icon(Icons.arrow_right_alt)
-                              // ElevatedButton(
-                              //   onPressed: () => entryDao.checkForVal(),
-                              //   child: Text('Check'),
-                              // )
-                              )
-                        ],
-                      ))
-                ],
-              ),
-            )
-          ],
+        appBar: AppBar(
+          title: Text('Simply Speak'),
         ),
-      )),
-    );
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          physics: ScrollPhysics(),
+          child: Container(
+              child: Center(
+            child: Column(
+              children: [
+                Container(
+                  height: 150.0,
+                  width: 250.0,
+                  padding: EdgeInsets.only(top: 60),
+                  // decoration:
+                  //     BoxDecoration(border: Border.all(color: Colors.black)),
+                  child: Column(
+                    children: [
+                      Text(
+                        "Prompt #1",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 150.0,
+                  width: 300.0,
+                  padding: EdgeInsets.only(top: 0),
+                  // decoration:
+                  //     BoxDecoration(border: Border.all(color: Colors.black)),
+                  child: Column(children: [
+                    Text("Talk about your day.\n",
+                        style: TextStyle(fontSize: 22),
+                        textAlign: TextAlign.center),
+                    Text(
+                        "Did you do anything special? How did you feel throughout the day? What brought you joy or displeasure?",
+                        style: TextStyle(fontSize: 16),
+                        textAlign: TextAlign.center)
+                  ]),
+                ),
+                Container(
+                  height: 330.0,
+                  width: 350.0,
+                  padding: EdgeInsets.only(top: 50),
+                  // decoration:
+                  //     BoxDecoration(border: Border.all(color: Colors.black)),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 150.0,
+                        width: 330.0,
+                        padding: EdgeInsets.only(top: 0),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black)),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          physics: ScrollPhysics(),
+                          child: Text(
+                            (_speechToText.isListening
+                                    ? '$_fullSentence' '$_lastWords'
+                                    : _speechEnabled
+                                        ? '$_fullSentence'
+                                        : 'Speech not available')
+                                .toString(),
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          //padding: const EdgeInsets.all(8.0),
+                        ),
+                      ),
+                      // Text((_speechToText.isListening
+                      //         ? '$_fullSentence' '$_lastWords'
+                      //         : _speechEnabled
+                      //             ? 'Tap the microphone to start listening...'
+                      //             : 'Speech not available')
+                      //     .toString()),
+                      Spacer(),
+                      Container(
+                          height: 100.0,
+                          width: 330.0,
+                          padding: EdgeInsets.only(top: 0),
+                          // decoration: BoxDecoration(
+                          //     border: Border.all(color: Colors.black)),
+                          alignment: Alignment.bottomCenter,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              ElevatedButton(
+                                  onPressed: _deleteLast,
+                                  child: Icon(Icons.backspace)),
+                              Container(
+                                  height: 65.0,
+                                  width: 85.0,
+                                  padding: EdgeInsets.only(top: 0),
+                                  child: ElevatedButton(
+                                      onPressed: _speechToText.isNotListening
+                                          ? _startListening
+                                          : _stopListening,
+                                      child: Icon(_speechToText.isNotListening
+                                          ? Icons.mic
+                                          : Icons.mic_off),
+                                      style: ElevatedButton.styleFrom(
+                                          shape: CircleBorder(),
+                                          primary: _speechToText.isListening
+                                              ? Colors.red
+                                              : Colors.blue))),
+                              ElevatedButton(
+                                  onPressed: _sendMessage,
+                                  child: Icon(Icons.arrow_right_alt)
+                                  // ElevatedButton(
+                                  //   onPressed: () => entryDao.checkForVal(),
+                                  //   child: Text('Check'),
+                                  // )
+                                  )
+                            ],
+                          ))
+                    ],
+                  ),
+                )
+              ],
+            ),
+          )),
+        ));
   }
 }

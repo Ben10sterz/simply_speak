@@ -18,7 +18,7 @@ class EntryRating extends StatefulWidget {
 class _EntryRatingState extends State<EntryRating> {
   final user = FirebaseAuth.instance.currentUser;
 
-  String rating = '';
+  String rating = '3';
 
   List<bool> selectedRating = [false, false, true, false, false];
 

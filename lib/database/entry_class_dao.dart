@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:simply_speak/database/entry_class.dart';
-import 'entry_test.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class EntryTestDao {

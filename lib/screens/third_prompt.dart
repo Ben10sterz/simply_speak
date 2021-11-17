@@ -7,7 +7,6 @@ import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../database/entry_test.dart';
 import '../database/entry_class_dao.dart';
 import '../api/google_sign_in.dart';
 

@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_this
+
 import 'package:flutter/material.dart';
 import 'package:simply_speak/screens/entry_rating.dart';
 
@@ -9,7 +11,7 @@ import '../database/entry_class_dao.dart';
 
 class EntryTitle extends StatefulWidget {
   final EntryDao entryDao;
-  EntryTitle({Key? key, required this.entryDao}) : super(key: key);
+  const EntryTitle({Key? key, required this.entryDao}) : super(key: key);
 
   @override
   _EntryTitleState createState() => _EntryTitleState();
@@ -23,6 +25,7 @@ class _EntryTitleState extends State<EntryTitle> {
 
   int count = 0;
   int _fullLength = 0;
+  // ignore: prefer_final_fields
   List<int> _lastLength = [];
 
   final user = FirebaseAuth.instance.currentUser;
@@ -31,7 +34,6 @@ class _EntryTitleState extends State<EntryTitle> {
   void initState() {
     super.initState();
     _initSpeech();
-    //entryDao.setReference(user!.email!);
   }
 
   void _startListening() async {
@@ -81,7 +83,7 @@ class _EntryTitleState extends State<EntryTitle> {
     }
   }
 
-  void _sendMessage() {
+  void _saveTitleNextPage() {
     widget.entryDao.setTitle(_fullSentence);
 
     Navigator.of(context).push(MaterialPageRoute(
@@ -95,20 +97,17 @@ class _EntryTitleState extends State<EntryTitle> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Simply Speak'),
+        title: const Text('Simply Speak'),
       ),
-      body: Container(
-          child: Center(
+      body: Center(
         child: Column(
           children: [
             Container(
               height: 200.0,
               width: 250.0,
               padding: EdgeInsets.only(top: 120),
-              // decoration:
-              //     BoxDecoration(border: Border.all(color: Colors.black)),
               child: Column(
-                children: [
+                children: const [
                   Text(
                     " ",
                     style: TextStyle(fontSize: 20),
@@ -116,34 +115,32 @@ class _EntryTitleState extends State<EntryTitle> {
                 ],
               ),
             ),
+            //////////////////////////////////////////////////////////////////
             Container(
               height: 100.0,
               width: 300.0,
-              padding: EdgeInsets.only(top: 0),
-              // decoration:
-              //     BoxDecoration(border: Border.all(color: Colors.black)),
-              child: Column(children: [
+              padding: const EdgeInsets.only(top: 0),
+              child: Column(children: const [
                 Text("Enter a Title For Your Entry",
                     style: TextStyle(fontSize: 22), textAlign: TextAlign.center)
               ]),
             ),
+            ////////////////////////////////////////////////////////////
             Container(
               height: 330.0,
               width: 350.0,
-              padding: EdgeInsets.only(top: 50),
-              // decoration:
-              //     BoxDecoration(border: Border.all(color: Colors.black)),
+              padding: const EdgeInsets.only(top: 50),
               child: Column(
                 children: [
                   Container(
                     height: 100.0,
                     width: 330.0,
-                    padding: EdgeInsets.only(top: 0),
+                    padding: const EdgeInsets.only(top: 0),
                     decoration:
                         BoxDecoration(border: Border.all(color: Colors.black)),
                     child: SingleChildScrollView(
                       scrollDirection: Axis.vertical,
-                      physics: ScrollPhysics(),
+                      physics: const ScrollPhysics(),
                       child: Text(
                         (_speechToText.isListening
                                 ? '$_fullSentence' '$_lastWords'
@@ -154,33 +151,25 @@ class _EntryTitleState extends State<EntryTitle> {
                         style: TextStyle(fontSize: 30),
                         textAlign: TextAlign.center,
                       ),
-                      //padding: const EdgeInsets.all(8.0),
                     ),
                   ),
-                  // Text((_speechToText.isListening
-                  //         ? '$_fullSentence' '$_lastWords'
-                  //         : _speechEnabled
-                  //             ? 'Tap the microphone to start listening...'
-                  //             : 'Speech not available')
-                  //     .toString()),
-                  Spacer(),
+                  const Spacer(),
+                  ////////////////////////// Button Area
                   Container(
                       height: 100.0,
                       width: 330.0,
-                      padding: EdgeInsets.only(top: 0),
-                      // decoration: BoxDecoration(
-                      //     border: Border.all(color: Colors.black)),
+                      padding: const EdgeInsets.only(top: 0),
                       alignment: Alignment.bottomCenter,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           ElevatedButton(
                               onPressed: _deleteLast,
-                              child: Icon(Icons.backspace)),
+                              child: const Icon(Icons.backspace)),
                           Container(
                               height: 65.0,
                               width: 85.0,
-                              padding: EdgeInsets.only(top: 0),
+                              padding: const EdgeInsets.only(top: 0),
                               child: ElevatedButton(
                                   onPressed: _speechToText.isNotListening
                                       ? _startListening
@@ -189,18 +178,13 @@ class _EntryTitleState extends State<EntryTitle> {
                                       ? Icons.mic
                                       : Icons.mic_off),
                                   style: ElevatedButton.styleFrom(
-                                      shape: CircleBorder(),
+                                      shape: const CircleBorder(),
                                       primary: _speechToText.isListening
                                           ? Colors.red
                                           : Colors.blue))),
                           ElevatedButton(
-                              onPressed: _sendMessage,
-                              child: Icon(Icons.arrow_right_alt)
-                              // ElevatedButton(
-                              //   onPressed: () => entryDao.checkForVal(),
-                              //   child: Text('Check'),
-                              // )
-                              )
+                              onPressed: _saveTitleNextPage,
+                              child: const Icon(Icons.arrow_right_alt))
                         ],
                       ))
                 ],
@@ -208,11 +192,12 @@ class _EntryTitleState extends State<EntryTitle> {
             )
           ],
         ),
-      )),
+      ),
     );
   }
 }
 
+// This function just makes it so that the first letter of each word of a sentence is capitalized
 extension StringCasingExtension on String {
   String toCapitalized() =>
       this.length > 0 ? '${this[0].toUpperCase()}${this.substring(1)}' : '';

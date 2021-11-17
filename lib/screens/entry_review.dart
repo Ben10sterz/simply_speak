@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simply_speak/screens/home_page.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,7 +6,7 @@ import '../database/entry_class_dao.dart';
 
 class EntryReview extends StatefulWidget {
   final EntryDao entryDao;
-  EntryReview({Key? key, required this.entryDao}) : super(key: key);
+  const EntryReview({Key? key, required this.entryDao}) : super(key: key);
 
   @override
   _EntryReviewState createState() => _EntryReviewState();

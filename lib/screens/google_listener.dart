@@ -5,9 +5,9 @@ import 'package:simply_speak/screens/sign_in_page.dart';
 import '../api/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatelessWidget {
+class GoogleListener extends StatelessWidget {
   // no use, just to make flutter happy
-  const HomePage({Key? key}) : super(key: key);
+  const GoogleListener({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -25,10 +25,10 @@ class HomePage extends StatelessWidget {
                 return buildLoading();
                 // if they are signed in, retunr the homepage
               } else if (snapshot.hasData) {
-                return Homepage();
+                return const Homepage();
                 // if they are not signed in and not currently trying to sign in, return the sign in screen
               } else {
-                return SignInScreen();
+                return const SignInScreen();
               }
             },
           ),

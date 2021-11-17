@@ -63,18 +63,18 @@ class _SignInScreenState extends State<SignInScreen> {
             ])));
   }
 
-  Future signIn() async {
-    final user = await GoogleSignInApi.login();
+  // Future signIn() async {
+  //   final user = await GoogleSignInApi.login();
 
-    if (user == null) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Sign in failed')));
-    } else {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => Homepage(),
-      ));
-    }
-  }
+  //   if (user == null) {
+  //     ScaffoldMessenger.of(context)
+  //         .showSnackBar(SnackBar(content: Text('Sign in failed')));
+  //   } else {
+  //     Navigator.of(context).push(MaterialPageRoute(
+  //       builder: (context) => Homepage(),
+  //     ));
+  //   }
+  // }
 
   skipLogin() {
     Navigator.of(context).pushReplacement(MaterialPageRoute(

@@ -11,12 +11,18 @@ import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // mamke sure that Firebase database is initialized
   await Firebase.initializeApp();
+  // run below
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  @override
+  // no use, just need this to make flutter happy
+  const MyApp({Key? key}) : super(key: key);
+
+  @override // here our ChangeNotifierProvider is initialized for the next page checking to make sure the user is signed in
   Widget build(BuildContext context) => ChangeNotifierProvider(
         create: (context) => GoogleSignInProvider(),
         child: MaterialApp(

@@ -11,13 +11,12 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:intl/date_symbol_data_local.dart';
+// import 'package:intl/intl.dart';
 
 import 'sign_in_page.dart';
 import '../api/google_sign_in_2.dart';
-import 'calander_testing_page.dart';
 
 class Homepage extends StatefulWidget {
   @override
@@ -25,13 +24,9 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  // Homepage({
-  //   Key? key,
-  //   required this.user,
-  // }) : super(key: key);
-
   @override
   initState() {
+    // list of our emoji faces for our calendar widget
     facesList = [
       'assets/images/Red Smiley.png',
       'assets/images/Red Orange Smiley.png',
@@ -40,44 +35,39 @@ class _HomepageState extends State<Homepage> {
       'assets/images/Green Smiley.png',
     ];
 
+    // fetch the entries for our Calander widget
     _performEntryFetch();
+
+    // fetches the entries in our one month span to get the number of each face
     _performOneMonthRatingFetch(
         DateTime.now().year.toString(), DateTime.now().month.toString());
-    print(insightRatingList);
-    //checkEntryMadeToday();
   }
 
+  // just initializing these variables / setting them to blank
   List<String> facesList = [];
   List<String> ratingsList = [];
   List<String> calendarList = [];
-  List<int> insightRatingList = [0, 0, 0, 0, 0];
-  bool entryMadeToday = false;
-
+  List<int> insightRatingList = [
+    0,
+    0,
+    0,
+    0,
+    0
+  ]; // this array changes in accordance to the number of entries with that corresponding rating/face
+  bool entryMadeToday = false; // was an entry made today
   PageController pageController = PageController(initialPage: 1);
-  int currentIndex = 1;
+  int currentIndex =
+      1; // current Index of the pageviewer widget (that spans the entire home page)
 
   final user = FirebaseAuth.instance.currentUser;
 
   final EntryTestDao entryDao = EntryTestDao();
 
-  // void checkEntryMadeToday() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String lastEntry = prefs.getString("lastEntry") ?? "";
-  //   print(lastEntry);
-  //   //prefs.setString("lastEntry", "");
-
-  //   DateTime today =
-  //       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-
-  //   if (today.toString() == lastEntry) {
-  //     entryMadeToday = true;
-  //   } else {
-  //     entryMadeToday = false;
-  //   }
-  // }
-
   void _performEntryFetch() {
+    // set it to false first for each time this is run
     entryMadeToday = false;
+
+    // this just gets all the entries
     FirebaseDatabase.instance
         .reference()
         .child(FirebaseAuth.instance.currentUser!.uid)
@@ -86,12 +76,15 @@ class _HomepageState extends State<Homepage> {
       Map<dynamic, dynamic> values = snapshot.value;
       for (var entries in values.values) {
         final message = Entry.fromJson(entries);
-
+        // we need each individual part of the date so we need to split it up
         var splitDate = message.date.split('-');
 
+        // calendarList is keeping track of the dates for the calendar widget
         calendarList.add(message.date);
+        // ratingList is adding the rating/face at the same spot as calendarList
         ratingsList.add((int.parse(message.rating) - 1).toString());
 
+        // might as well check if an entry has been made today too
         if (int.parse(splitDate[0]) == DateTime.now().year) {
           if (int.parse(splitDate[1]) == DateTime.now().month) {
             if (int.parse(splitDate[2]) == DateTime.now().day) {
@@ -100,11 +93,11 @@ class _HomepageState extends State<Homepage> {
           }
         }
       }
-      //final entries = Entry.fromJson(snapshot.value);
-      //print(entries.date.toString());
     });
   }
 
+  // same as above, but performing on just one month for our insights page
+  // honestly could probably put this in our function above instead
   void _performOneMonthRatingFetch(String year, String month) {
     insightRatingList = [0, 0, 0, 0, 0];
     FirebaseDatabase.instance
@@ -118,9 +111,7 @@ class _HomepageState extends State<Homepage> {
 
         var splitDate = message.date.split('-');
 
-        print(splitDate[0] + " vs " + year);
         if (splitDate[0] == year) {
-          print(splitDate[1] + " vs " + month);
           if (splitDate[1] == month) {
             insightRatingList[int.parse(message.rating) - 1]++;
           }
@@ -130,23 +121,14 @@ class _HomepageState extends State<Homepage> {
     //return insightRatingList;
   }
 
+  // just a function to delay our app for half a second as it grabs entries
   Future<bool> testFuture() async {
     await Future.delayed(const Duration(milliseconds: 500), () => "5");
     return Future<bool>.value(true);
   }
 
-  // Stream<List> _initGetDatabase(List list) async {
-  //   print("hit init GetDatabase");
-  //   return calendarList = [
-  //     'assets/images/Red Smiley.png',
-  //     'assets/images/Red Orange Smiley.png'
-  //   ];
-  // }
-
   @override
   Widget build(BuildContext context) {
-    final database = FirebaseDatabase.instance.reference().child(user!.uid);
-
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: currentIndex,
@@ -177,29 +159,24 @@ class _HomepageState extends State<Homepage> {
         actions: <Widget>[
           TextButton(
               onPressed: () {
+                // log out the user and tell the provider that's what we've done
                 final provider =
                     Provider.of<GoogleSignInProvider>(context, listen: false);
                 provider.logout();
-                // Navigator.of(context).pushReplacement(MaterialPageRoute(
-                //   builder: (context) => SignInScreen(),
-                // ));
               },
               child: Text("Logout",
                   style: TextStyle(
                     color: Colors.white,
                   ))),
+          // avatar for photo in the top right
           CircleAvatar(backgroundImage: NetworkImage(user!.photoURL!)),
-
-          // IconButton(
-          //     onPressed: () {
-          //       print(user!.displayName);
-          //     },
-          //     icon: ImageIcon(NetworkImage(user!.photoURL!)))
         ],
       ),
       body: FutureBuilder(
         future: testFuture(),
         builder: (context, snapshot) {
+          // if/when the snapshot.data returns true, then build the below
+          // other wise else is the spinning loading symbol
           if (snapshot.data == true) {
             return PageView(
               controller: pageController,
@@ -208,6 +185,7 @@ class _HomepageState extends State<Homepage> {
                   currentIndex = page;
                 });
               },
+              ///////////////////////////////////FIRST PAGE ////////////////////////////////////////////
               children: [
                 Container(
                   color: Colors.white,
@@ -226,37 +204,29 @@ class _HomepageState extends State<Homepage> {
                                 rowHeight: 75.00,
                                 daysOfWeekHeight: 20.00,
                                 firstDay: DateTime(2021, 01, 01),
+                                // last day is 5 years in the future
                                 lastDay: DateTime.now()
                                     .add(const Duration(days: 5 * 365)),
                                 focusedDay: DateTime.now(),
                                 dayHitTestBehavior: HitTestBehavior.translucent,
-                                onPageChanged: (date) {
-                                  // print(date.month.toString());
-                                  // _performEntryFetch(date.month.toString());
-                                  // Future.delayed(
-                                  //     const Duration(milliseconds: 500), () => "5");
-                                },
                                 calendarBuilders: CalendarBuilders(
+                                    // customerizer for the calendar
+                                    // lets us individual change each day within the calendar
                                     defaultBuilder: (context, day, currentDay) {
                                   var i = 0;
-                                  print(calendarList);
                                   for (var item in calendarList) {
+                                    // for all days in the calendarList...
                                     var splitDate = item.split('-');
-
-                                    // print("Wahat im looking for" +
-                                    //     facesList[int.parse(ratingsList[i])]);
-
-                                    // print(day.month);
-                                    // print(splitDate[2]);
-
                                     if (day.year.toString() == splitDate[0]) {
                                       if (day.month.toString() ==
                                           splitDate[1]) {
                                         if (day.day ==
                                             int.parse(splitDate[2])) {
                                           return Column(
+                                            // return a coolumn widget with...
                                             children: [
                                               IconButton(
+                                                // an icon button (rating emoji)...
                                                 icon: Image.asset(facesList[
                                                     int.parse(ratingsList[i])]),
                                                 onPressed: () {
@@ -271,7 +241,8 @@ class _HomepageState extends State<Homepage> {
                                                 },
                                               ),
                                               Spacer(),
-                                              Text(day.day.toString())
+                                              Text(day.day
+                                                  .toString()) // and the text of the day
                                             ],
                                           );
                                         }
@@ -279,13 +250,15 @@ class _HomepageState extends State<Homepage> {
                                     }
 
                                     i++;
-                                  }
+                                  } // otherwise if the date doesn't line up with a day in the calendar list
+                                  // just return a column with ONLY a text widget
                                   return Column(
                                     children: [
                                       Spacer(),
                                       Text(day.day.toString())
                                     ],
                                   );
+                                  // this builder was just to make the days outside the month look consistent
                                 }, outsideBuilder: (context, day, currentDay) {
                                   return Column(
                                     children: [
@@ -303,6 +276,7 @@ class _HomepageState extends State<Homepage> {
                         }
                       }),
                 ),
+                ////////////////////////// SECOND PAGE /////////////////////////////////////////////////////////////////////////
                 Center(
                   child: Container(
                     height: 300.00,
@@ -311,11 +285,12 @@ class _HomepageState extends State<Homepage> {
                     child: Column(
                       children: [
                         ElevatedButton(
+                          // all of these check if entryMadeToday is false. If false, run the ? if true run the :
                           style: ElevatedButton.styleFrom(
                               fixedSize: Size(100, 50),
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(50))),
-                          onPressed: beginEntry,
+                          onPressed: entryMadeToday ? null : beginEntry,
                           child: Icon(
                             entryMadeToday ? Icons.mic_off : Icons.mic,
                           ),
@@ -338,8 +313,8 @@ class _HomepageState extends State<Homepage> {
                     ),
                   ),
                 ),
-                /////////////////////////////////////////////////////////////////////////////
-
+                ///////////////////////////// THIRD PAGE ///////////////////////////////////////////////////////////////
+                /// just a bunch of widgets for each of our faces
                 Center(
                     child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -413,27 +388,20 @@ class _HomepageState extends State<Homepage> {
           }
         },
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     print(insightRatingList);
-      //   },
-      //   // pageController.animateToPage(0,
-      //   //     duration: Duration(milliseconds: 250), curve: Curves.bounceIn),
-      //   child: const Icon(Icons.mic),
-      //   backgroundColor: Colors.cyan,
-      // ),
     );
   }
 
   beginEntry() async {
     if (!entryMadeToday) {
+      // get the shared preferences instance
       SharedPreferences prefs = await SharedPreferences.getInstance();
       //prefs.setBool('information', false);
 
+      // get the information bool
       bool? informationStatus = prefs.getBool('information');
-
       informationStatus ??= false;
 
+      // if they hadn't checked the box to get rid of the information page, send them to that TODO
       if (informationStatus == false) {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => InformationScreen(
@@ -446,9 +414,5 @@ class _HomepageState extends State<Homepage> {
         ));
       }
     }
-  }
-
-  void test() {
-    print('Testing here');
   }
 }

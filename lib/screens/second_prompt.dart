@@ -7,9 +7,7 @@ import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../database/entry_class_dao.dart';
-import '../api/google_sign_in.dart';
 
-//import 'first_prompt.dart';
 import 'third_prompt.dart';
 
 class SecondPrompt extends StatefulWidget {
@@ -28,18 +26,16 @@ class _SecondPromptState extends State<SecondPrompt> {
   String _lastWords = '';
   String _fullSentence = '';
 
-  int count = 0;
   int _fullLength = 0;
+  // ignore: prefer_final_fields
   List<int> _lastLength = [];
 
-  //final entryDao = EntryTestDao();
   final user = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
     super.initState();
     _initSpeech();
-    //entryDao.setReference(user!.email!);
   }
 
   void _startListening() async {
@@ -50,7 +46,6 @@ class _SecondPromptState extends State<SecondPrompt> {
 
   void _onSpeechResult(SpeechRecognitionResult result) {
     setState(() {
-      count++;
       _lastWords = result.recognizedWords;
     });
 
@@ -88,10 +83,9 @@ class _SecondPromptState extends State<SecondPrompt> {
     }
   }
 
-  void _sendMessage() {
+  void _sendEntryNextPage() {
     widget.entryDao.setPrompt(_fullSentence, promptNumber);
-    // final message = EntryTest('testPurposes', DateTime.now());
-    // entryDao.saveEntry(message);
+
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => ThirdPrompt(
         entryDao: widget.entryDao,
@@ -211,7 +205,7 @@ class _SecondPromptState extends State<SecondPrompt> {
                                               ? Colors.red
                                               : Colors.blue))),
                               ElevatedButton(
-                                  onPressed: _sendMessage,
+                                  onPressed: _sendEntryNextPage,
                                   child: Icon(Icons.arrow_right_alt)
                                   // ElevatedButton(
                                   //   onPressed: () => entryDao.checkForVal(),

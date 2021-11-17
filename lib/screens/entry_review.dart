@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simply_speak/screens/home_page.dart';
 
-import 'package:speech_to_text/speech_to_text.dart';
-import 'package:speech_to_text/speech_recognition_result.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import '../database/entry_class_dao.dart';
 
@@ -18,24 +15,21 @@ class EntryReview extends StatefulWidget {
 
 class _EntryReviewState extends State<EntryReview> {
   final user = FirebaseAuth.instance.currentUser;
+
+  // just get todays date in the format we want it (without seconds)
   DateTime today =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
-  void setPreferencesAndTodaysDate() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    prefs.setString("lastEntry", today.toString());
-  }
-
-  void _sendMessage() {
-    setPreferencesAndTodaysDate();
+  void _endEntryGoHomePage() {
+    // make our entryDao save this entry
     widget.entryDao.saveEntry();
 
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (context) => Homepage(),
+      builder: (context) => const Homepage(),
     ));
   }
 
+  // gets the rating icon/emoji that the user previously selected
   String getIcon() {
     List<String> urlList = [
       'assets/images/Red Smiley.png',
@@ -44,7 +38,8 @@ class _EntryReviewState extends State<EntryReview> {
       'assets/images/Yellow Green Smiley.png',
       'assets/images/Green Smiley.png'
     ];
-    print(urlList[int.parse(widget.entryDao.getRating()) - 1]);
+
+    // minus 1 because arrays go to 0 and our database entry starts with 1
     return urlList[int.parse(widget.entryDao.getRating()) - 1];
   }
 
@@ -52,23 +47,21 @@ class _EntryReviewState extends State<EntryReview> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Simply Speak'),
+          title: const Text('Simply Speak'),
         ),
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
-          physics: ScrollPhysics(),
-          child: Container(
-              child: Center(
+          physics: const ScrollPhysics(),
+          child: Center(
             child: Column(
               children: [
+                /////////////////////////////// Review entry at top of page
                 Container(
                   height: 100.0,
                   width: 250.0,
-                  padding: EdgeInsets.only(top: 20),
-                  // decoration:
-                  //     BoxDecoration(border: Border.all(color: Colors.black)),
+                  padding: const EdgeInsets.only(top: 20),
                   child: Column(
-                    children: [
+                    children: const [
                       Text(
                         "Review your Entry",
                         style: TextStyle(
@@ -77,142 +70,127 @@ class _EntryReviewState extends State<EntryReview> {
                     ],
                   ),
                 ),
+                ///////////////////////////////////// Title of their entry
                 Container(
                   height: 100.0,
                   width: 300.0,
-                  padding: EdgeInsets.only(top: 0),
-                  // decoration:
-                  //     BoxDecoration(border: Border.all(color: Colors.black)),
+                  padding: const EdgeInsets.only(top: 0),
                   child: (SingleChildScrollView(
                       scrollDirection: Axis.vertical,
-                      physics: ScrollPhysics(),
+                      physics: const ScrollPhysics(),
                       child: Text(
                         widget.entryDao.getTitle(),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 25,
                           decoration: TextDecoration.underline,
                         ),
                         textAlign: TextAlign.center,
                       ))),
                 ),
+                //////////////////////////////////// Entry area
                 Container(
                   height: 850.0,
                   width: 350.0,
-                  //padding: EdgeInsets.only(top: 0),
-                  // decoration:
-                  //     BoxDecoration(border: Border.all(color: Colors.black)),
                   child: Column(
                     children: [
+                      ////////////////////////////// 1st Entry
                       Container(
                           height: 40.0,
                           width: 330.0,
-                          //padding: EdgeInsets.only(top: 0),
-                          // decoration: BoxDecoration(
-                          //     border: Border.all(color: Colors.black)),
-                          child: Text(
-                            "This is the area for prompt #1",
+                          child: const Text(
+                            "#1 Day Prompt",
                             style: TextStyle(fontSize: 20),
                             textAlign: TextAlign.center,
                           )),
                       Container(
                         height: 100.0,
                         width: 300.0,
-                        padding: EdgeInsets.only(top: 0),
+                        padding: const EdgeInsets.only(top: 0),
                         decoration: BoxDecoration(
                             border: Border.all(color: Colors.black)),
                         child: (SingleChildScrollView(
                             scrollDirection: Axis.vertical,
-                            physics: ScrollPhysics(),
+                            physics: const ScrollPhysics(),
                             child: Text(widget.entryDao.getPrompt(1),
-                                style: TextStyle(fontSize: 18),
+                                style: const TextStyle(fontSize: 18),
                                 textAlign: TextAlign.center))),
                       ),
-                      Spacer(),
+                      const Spacer(),
+                      //////////////////////////////////// 2nd Entry
                       Container(
                           height: 60.0,
                           width: 330.0,
-                          padding: EdgeInsets.only(top: 20),
-                          // decoration: BoxDecoration(
-                          //     border: Border.all(color: Colors.black)),
-                          child: Text(
-                            "This is the area for prompt #2",
+                          padding: const EdgeInsets.only(top: 20),
+                          child: const Text(
+                            "#2 Appreciation Prompt",
                             style: TextStyle(fontSize: 20),
                             textAlign: TextAlign.center,
                           )),
                       Container(
                         height: 100.0,
                         width: 300.0,
-                        padding: EdgeInsets.only(top: 0),
+                        padding: const EdgeInsets.only(top: 0),
                         decoration: BoxDecoration(
                             border: Border.all(color: Colors.black)),
                         child: (SingleChildScrollView(
                             scrollDirection: Axis.vertical,
-                            physics: ScrollPhysics(),
+                            physics: const ScrollPhysics(),
                             child: Text(widget.entryDao.getPrompt(2),
-                                style: TextStyle(fontSize: 18),
+                                style: const TextStyle(fontSize: 18),
                                 textAlign: TextAlign.center))),
                       ),
-                      Spacer(),
+                      const Spacer(),
+                      ///////////////////////////////////// 3rd Entry
                       Container(
                           height: 60.0,
                           width: 330.0,
-                          padding: EdgeInsets.only(top: 20),
-                          // decoration: BoxDecoration(
-                          //     border: Border.all(color: Colors.black)),
-                          child: Text(
-                            "This is the area for prompt #3",
+                          padding: const EdgeInsets.only(top: 20),
+                          child: const Text(
+                            "#3 Improvement Prompt",
                             style: TextStyle(fontSize: 20),
                             textAlign: TextAlign.center,
                           )),
                       Container(
                         height: 100.0,
                         width: 300.0,
-                        padding: EdgeInsets.only(top: 0),
+                        padding: const EdgeInsets.only(top: 0),
                         decoration: BoxDecoration(
                             border: Border.all(color: Colors.black)),
                         child: (SingleChildScrollView(
                             scrollDirection: Axis.vertical,
-                            physics: ScrollPhysics(),
+                            physics: const ScrollPhysics(),
                             child: Text(widget.entryDao.getPrompt(3),
-                                style: TextStyle(fontSize: 18),
+                                style: const TextStyle(fontSize: 18),
                                 textAlign: TextAlign.center))),
                       ),
+                      ///////////////////////////////////// Entry rating area
                       Container(
                           width: 330,
                           height: 125,
-                          // decoration: BoxDecoration(
-                          //     border: Border.all(color: Colors.black)),
-                          padding: EdgeInsets.only(top: 30),
+                          padding: const EdgeInsets.only(top: 30),
                           child: Image(
                             width: 50,
                             height: 50,
                             image: AssetImage(getIcon()),
-                            //size: 50,
                           )),
-                      Spacer(),
+                      const Spacer(),
+                      //////////////////////////////////////////// Save button area
                       Container(
                           height: 100.0,
                           width: 330.0,
-                          padding: EdgeInsets.only(top: 0),
-                          // decoration: BoxDecoration(
-                          //     border: Border.all(color: Colors.black)),
+                          padding: const EdgeInsets.only(top: 0),
                           alignment: Alignment.bottomCenter,
                           child: ElevatedButton(
-                              onPressed: _sendMessage,
-                              child: Icon(Icons.save),
+                              onPressed: _endEntryGoHomePage,
+                              child: const Icon(Icons.save),
                               style: ElevatedButton.styleFrom(
-                                  fixedSize: Size(75, 50))
-                              // ElevatedButton(
-                              //   onPressed: () => entryDao.checkForVal(),
-                              //   child: Text('Check'),
-                              // )
-                              )),
+                                  fixedSize: const Size(75, 50)))),
                       Container(
                           height: 100.0,
                           width: 330.0,
-                          padding: EdgeInsets.only(top: 10),
-                          child: Text(
-                              "WARNING!\n You will be unable to make changes after saving.",
+                          padding: const EdgeInsets.only(top: 10),
+                          child: const Text(
+                              "NOTICE!\n You will be unable to make changes after saving.",
                               style: TextStyle(fontSize: 13),
                               textAlign: TextAlign.center)),
                     ],
@@ -220,7 +198,7 @@ class _EntryReviewState extends State<EntryReview> {
                 )
               ],
             ),
-          )),
+          ),
         ));
   }
 }

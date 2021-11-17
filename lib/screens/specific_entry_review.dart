@@ -1,17 +1,9 @@
-import 'dart:async';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:simply_speak/database/entry_class.dart';
-import 'package:simply_speak/screens/home_page.dart';
-
-import 'package:speech_to_text/speech_to_text.dart';
-import 'package:speech_to_text/speech_recognition_result.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import '../database/entry_class_dao.dart';
-
-import 'package:intl/intl.dart';
 
 class SpecificEntryReview extends StatefulWidget {
   final EntryDao entryDao;
@@ -41,22 +33,14 @@ class _SpecificEntryReviewState extends State<SpecificEntryReview> {
       'assets/images/Yellow Green Smiley.png',
       'assets/images/Green Smiley.png'
     ];
-    //print(urlList[int.parse(widget.entryDao.getRating()) - 1]);
-    //return 'assets/images/Green Smiley.png';
     return urlList[int.parse(entry.rating) - 1];
   }
 
   //late Entry entry;
 
   Future<bool> testFuture() async {
-    // if (entry.rating == '') {
-    //   return Future<bool>.value(false);
-    // } else {
-    print("no");
-    await new Future.delayed(const Duration(seconds: 1), () => "5");
-    print("yes");
+    await Future.delayed(const Duration(seconds: 1), () => "5");
     return Future<bool>.value(true);
-    //}
   }
 
   void _retrieveEntry(DateTime selectedDate) {
@@ -78,42 +62,9 @@ class _SpecificEntryReviewState extends State<SpecificEntryReview> {
             }
           }
         }
-        //print(message.date);
       }
-      //final entries = Entry.fromJson(snapshot.value);
-      //print(entries.date.toString());
     });
   }
-
-  // Future<Entry> _retrieveEntry2(DateTime selectedDate) async {
-  //   var entry2;
-  //   FirebaseDatabase.instance
-  //       .reference()
-  //       .child(FirebaseAuth.instance.currentUser!.uid)
-  //       .once()
-  //       .then((snapshot) {
-  //     Map<dynamic, dynamic> values = snapshot.value;
-  //     for (var entries in values.values) {
-  //       final message = Entry.fromJson(entries);
-  //       var splitDate = message.date.split('-');
-
-  //       if (int.parse(splitDate[0]) == selectedDate.year) {
-  //         if (int.parse(splitDate[1]) == selectedDate.month) {
-  //           if (int.parse(splitDate[2]) == selectedDate.day) {
-  //             entry2 = message;
-  //             //return FutureOr<Entry>.onValue(entry);
-  //           }
-  //         }
-  //       }
-  //       //print(message.date);
-  //     }
-  //     //final entries = Entry.fromJson(snapshot.value);
-  //     //print(entries.date.toString());
-  //   });
-  //   print(selectedDate);
-  //   print(entry.date);
-  //   return Future<Entry>.value(entry2);
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +116,7 @@ class _SpecificEntryReviewState extends State<SpecificEntryReview> {
                                   // decoration: BoxDecoration(
                                   //     border: Border.all(color: Colors.black)),
                                   child: Text(
-                                    "#1 Daily Log Prompt",
+                                    "#1 Day Log Prompt",
                                     style: TextStyle(fontSize: 20),
                                     textAlign: TextAlign.center,
                                   )),

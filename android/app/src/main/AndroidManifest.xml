@@ -2,7 +2,7 @@
     package="com.example.simply_speak">
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
    <application
-        android:label="simply_speak"
+        android:label="Simply Speak"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

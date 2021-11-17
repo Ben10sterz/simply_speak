@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:simply_speak/screens/entry_review.dart';
 
-import 'package:speech_to_text/speech_to_text.dart';
-import 'package:speech_to_text/speech_recognition_result.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import '../database/entry_class_dao.dart';
 
 class EntryRating extends StatefulWidget {
   final EntryTestDao entryDao;
-  EntryRating({Key? key, required this.entryDao}) : super(key: key);
+  const EntryRating({Key? key, required this.entryDao}) : super(key: key);
 
   @override
   _EntryRatingState createState() => _EntryRatingState();
 }
 
 class _EntryRatingState extends State<EntryRating> {
+  // get the current user
   final user = FirebaseAuth.instance.currentUser;
 
+  // in case they skip through this page, the default rating is 3 or yellow
   String rating = '3';
-
+  // this is used in the widget to show the currently selected rating
   List<bool> selectedRating = [false, false, true, false, false];
 
-  void _sendMessage() {
+  void _saveRatingNextPage() {
     widget.entryDao.setRating(rating);
 
     Navigator.of(context).push(MaterialPageRoute(
@@ -42,7 +41,7 @@ class _EntryRatingState extends State<EntryRating> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Simply Speak'),
+        title: const Text('Simply Speak'),
       ),
       body: Container(
           child: Center(
@@ -51,11 +50,9 @@ class _EntryRatingState extends State<EntryRating> {
             Container(
               height: 200.0,
               width: 250.0,
-              padding: EdgeInsets.only(top: 120),
-              // decoration:
-              //     BoxDecoration(border: Border.all(color: Colors.black)),
+              padding: const EdgeInsets.only(top: 120),
               child: Column(
-                children: [
+                children: const [
                   Text(
                     " ",
                     style: TextStyle(fontSize: 20),
@@ -63,41 +60,42 @@ class _EntryRatingState extends State<EntryRating> {
                 ],
               ),
             ),
+            //////////////////// Title ///////////////////
             Container(
               height: 100.0,
               width: 300.0,
-              padding: EdgeInsets.only(top: 0),
-              // decoration:
-              //     BoxDecoration(border: Border.all(color: Colors.black)),
-              child: Column(children: [
+              padding: const EdgeInsets.only(top: 0),
+              child: Column(children: const [
                 Text("Please give your \n day a rating",
                     style: TextStyle(fontSize: 22), textAlign: TextAlign.center)
               ]),
             ),
+            ///////////// Container containing ratings
             Container(
               height: 330.0,
               width: 350.0,
-              padding: EdgeInsets.only(top: 0),
-              // decoration:
-              //     BoxDecoration(border: Border.all(color: Colors.black)),
+              padding: const EdgeInsets.only(top: 0),
               child: Column(
                 children: [
                   Container(
                       height: 200.0,
                       width: 330.0,
-                      padding: EdgeInsets.only(top: 0),
+                      padding: const EdgeInsets.only(top: 0),
                       child: Row(
                         children: [
+                          //////////////////////////////////////////////////
                           Container(
-                            //color: Colors.green,
                             decoration: BoxDecoration(
+                                // if the selectedRating is true, the box decoration is blue, otherwise it's transparent
                                 color: selectedRating[0]
                                     ? Colors.blue
                                     : Colors.transparent,
                                 shape: BoxShape.circle),
                             child: IconButton(
                                 onPressed: () {
+                                  // set the currently selected rating to this one
                                   setRating('1');
+                                  // update the screen so we can see the currently selected
                                   setState(() {});
                                 },
                                 iconSize: 50,
@@ -105,8 +103,8 @@ class _EntryRatingState extends State<EntryRating> {
                                 icon: Image.asset(
                                     'assets/images/Red Smiley.png')),
                           ),
+                          ////////////////////////////////////////////////////// each of these boxes is coded the same
                           Container(
-                            //color: Colors.green,
                             decoration: BoxDecoration(
                                 color: selectedRating[1]
                                     ? Colors.blue
@@ -122,8 +120,8 @@ class _EntryRatingState extends State<EntryRating> {
                                 icon: Image.asset(
                                     'assets/images/Red Orange Smiley.png')),
                           ),
+                          ///////////////////////////////////////////////
                           Container(
-                            //color: Colors.green,
                             decoration: BoxDecoration(
                                 color: selectedRating[2]
                                     ? Colors.blue
@@ -139,8 +137,8 @@ class _EntryRatingState extends State<EntryRating> {
                                 icon: Image.asset(
                                     'assets/images/Orange Smiley.png')),
                           ),
+                          ////////////////////////////////////////////
                           Container(
-                            //color: Colors.green,
                             decoration: BoxDecoration(
                                 color: selectedRating[3]
                                     ? Colors.blue
@@ -156,8 +154,8 @@ class _EntryRatingState extends State<EntryRating> {
                                 icon: Image.asset(
                                     'assets/images/Yellow Green Smiley.png')),
                           ),
+                          ///////////////////////////////////////////////
                           Container(
-                            //color: Colors.green,
                             decoration: BoxDecoration(
                                 color: selectedRating[4]
                                     ? Colors.blue
@@ -174,51 +172,20 @@ class _EntryRatingState extends State<EntryRating> {
                                     'assets/images/Green Smiley.png')),
                           )
                         ],
-                      )
-                      //padding: const EdgeInsets.all(8.0),
-
-                      ),
-                  // Text((_speechToText.isListening
-                  //         ? '$_fullSentence' '$_lastWords'
-                  //         : _speechEnabled
-                  //             ? 'Tap the microphone to start listening...'
-                  //             : 'Speech not available')
-                  //     .toString()),
-                  Spacer(),
+                      )),
+                  const Spacer(),
                   Container(
                       height: 100.0,
                       width: 330.0,
-                      padding: EdgeInsets.only(top: 0),
-                      // decoration: BoxDecoration(
-                      //     border: Border.all(color: Colors.black)),
+                      padding: const EdgeInsets.only(top: 0),
                       alignment: Alignment.bottomCenter,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          // ElevatedButton(
-                          //     onPressed: _deleteLast,
-                          //     child: Icon(Icons.backspace)),
-                          // Container(
-                          //     height: 65.0,
-                          //     width: 85.0,
-                          //     padding: EdgeInsets.only(top: 0),
-                          //     child: ElevatedButton(
-                          //         onPressed: _speechToText.isNotListening
-                          //             ? _startListening
-                          //             : _stopListening,
-                          //         child: Icon(_speechToText.isNotListening
-                          //             ? Icons.mic
-                          //             : Icons.mic_off),
-                          //         style: ElevatedButton.styleFrom(
-                          //             shape: CircleBorder()))),
                           ElevatedButton(
-                              onPressed: _sendMessage,
-                              child: Icon(Icons.arrow_right_alt)
-                              // ElevatedButton(
-                              //   onPressed: () => entryDao.checkForVal(),
-                              //   child: Text('Check'),
-                              // )
-                              )
+                              // save the rating and go to the next page
+                              onPressed: _saveRatingNextPage,
+                              child: const Icon(Icons.arrow_right_alt))
                         ],
                       ))
                 ],

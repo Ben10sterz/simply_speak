@@ -11,14 +11,13 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:intl/date_symbol_data_local.dart';
-// import 'package:intl/intl.dart';
 
-import 'sign_in_page.dart';
 import '../api/google_sign_in.dart';
 
 class Homepage extends StatefulWidget {
+  // no use, just making flutter happy
+  const Homepage({Key? key}) : super(key: key);
+
   @override
   _HomepageState createState() => _HomepageState();
 }

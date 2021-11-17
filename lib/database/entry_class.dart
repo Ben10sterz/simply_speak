@@ -9,6 +9,7 @@ class Entry {
   Entry(this.date, this.rating, this.title, this.entryOne, this.entryTwo,
       this.entryThree);
 
+  // going from a JSON entry to an object we can take values from
   Entry.fromJson(Map<dynamic, dynamic> json)
       : date = json['date'] as String,
         rating = json['rating'] as String,
@@ -17,6 +18,7 @@ class Entry {
         entryTwo = json['entryTwo'] as String,
         entryThree = json['entryThree'] as String;
 
+  // going from an Entry object to a JSON object
   Map<dynamic, dynamic> toJson() => <dynamic, dynamic>{
         'date': date.toString(),
         'rating': rating,

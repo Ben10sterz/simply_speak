@@ -318,7 +318,15 @@ class _HomepageState extends State<Homepage> {
                     child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Your monthly rating insights: "),
+                    Text("Your monthly rating insights: ",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                        )),
+                    Container(
+                      height: 20,
+                    ),
                     Row(
                       children: [
                         Expanded(

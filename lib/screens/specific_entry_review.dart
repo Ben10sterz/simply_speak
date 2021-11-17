@@ -14,7 +14,7 @@ import '../database/entry_class_dao.dart';
 import 'package:intl/intl.dart';
 
 class SpecificEntryReview extends StatefulWidget {
-  final EntryTestDao entryDao;
+  final EntryDao entryDao;
   final DateTime selectedDate;
   SpecificEntryReview(
       {Key? key, required this.entryDao, required this.selectedDate})

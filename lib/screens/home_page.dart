@@ -60,7 +60,7 @@ class _HomepageState extends State<Homepage> {
 
   final user = FirebaseAuth.instance.currentUser;
 
-  final EntryTestDao entryDao = EntryTestDao();
+  final EntryDao entryDao = EntryDao();
 
   void _performEntryFetch() {
     // set it to false first for each time this is run

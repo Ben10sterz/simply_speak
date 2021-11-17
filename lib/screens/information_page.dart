@@ -4,7 +4,7 @@ import 'package:simply_speak/database/entry_class_dao.dart';
 import 'package:simply_speak/screens/first_prompt.dart';
 
 class InformationScreen extends StatefulWidget {
-  final EntryTestDao entryDao;
+  final EntryDao entryDao;
   InformationScreen({Key? key, required this.entryDao}) : super(key: key);
   @override
   _InformationScreenState createState() => _InformationScreenState();

@@ -10,7 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../database/entry_class_dao.dart';
 
 class ThirdPrompt extends StatefulWidget {
-  final EntryTestDao entryDao;
+  final EntryDao entryDao;
   ThirdPrompt({Key? key, required this.entryDao}) : super(key: key);
 
   @override

@@ -8,7 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../database/entry_class_dao.dart';
 
 class EntryTitle extends StatefulWidget {
-  final EntryTestDao entryDao;
+  final EntryDao entryDao;
   EntryTitle({Key? key, required this.entryDao}) : super(key: key);
 
   @override
@@ -25,7 +25,6 @@ class _EntryTitleState extends State<EntryTitle> {
   int _fullLength = 0;
   List<int> _lastLength = [];
 
-  //final entryDao = EntryTestDao();
   final user = FirebaseAuth.instance.currentUser;
 
   @override

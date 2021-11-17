@@ -11,7 +11,7 @@ import '../database/entry_class_dao.dart';
 import 'second_prompt.dart';
 
 class FirstPrompt extends StatefulWidget {
-  final EntryTestDao entryDao;
+  final EntryDao entryDao;
   FirstPrompt({Key? key, required this.entryDao}) : super(key: key);
 
   @override

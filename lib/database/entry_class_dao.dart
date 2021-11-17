@@ -2,7 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:simply_speak/database/entry_class.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class EntryTestDao {
+class EntryDao {
   final user = FirebaseAuth.instance.currentUser;
   // Date, rating, title, 1st prompt, 2nd prompt, 3rd prompt |
   //this is how entryList is laid out
@@ -11,7 +11,7 @@ class EntryTestDao {
   // get a reference to the database
   DatabaseReference _entryRef = FirebaseDatabase.instance.reference();
 
-  EntryTestDao() {
+  EntryDao() {
     // but the actual reference is to the current users Google ID
     _entryRef = _entryRef.child(user!.uid);
   }

@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../database/entry_class_dao.dart';
 
 class EntryRating extends StatefulWidget {
-  final EntryTestDao entryDao;
+  final EntryDao entryDao;
   const EntryRating({Key? key, required this.entryDao}) : super(key: key);
 
   @override

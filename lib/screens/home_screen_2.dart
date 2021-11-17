@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:simply_speak/screens/home_page.dart';
 import 'package:simply_speak/screens/sign_in_page.dart';
-import '../api/google_sign_in_2.dart';
+import '../api/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {

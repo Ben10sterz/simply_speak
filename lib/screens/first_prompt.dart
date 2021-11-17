@@ -8,7 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../database/entry_test.dart';
 import '../database/entry_class_dao.dart';
-import '../api/google_sign_in_2.dart';
+import '../api/google_sign_in.dart';
 
 import 'second_prompt.dart';
 

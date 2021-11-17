@@ -16,7 +16,7 @@ import 'package:provider/provider.dart';
 // import 'package:intl/intl.dart';
 
 import 'sign_in_page.dart';
-import '../api/google_sign_in_2.dart';
+import '../api/google_sign_in.dart';
 
 class Homepage extends StatefulWidget {
   @override

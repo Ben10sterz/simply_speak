@@ -85,7 +85,7 @@ class _SpecificEntryReviewState extends State<SpecificEntryReview> {
                       children: [
                         //////////////////////////////////// Title area
                         Container(
-                          height: 100.0,
+                          height: 200.0,
                           width: 300.0,
                           padding: const EdgeInsets.only(top: 30),
                           child: (SingleChildScrollView(
